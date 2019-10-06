@@ -1,0 +1,77 @@
+# encoding: ascii-8bit
+# frozen_string_literal: true
+
+require 'etc'
+require 'http/parser'
+require 'logger'
+require 'socket'
+require 'time'
+require 'timeout'
+require 'tttls1.3'
+require 'webrick'
+
+def simple_http_response(body)
+  s = <<~RESPONSE
+    HTTP/1.1 200 OK
+    Date: #{Time.now.httpdate}
+    Content-Type: text/html
+    Content-Length: #{body.length}
+    Server: tttls1.3 https server
+
+    #{body}
+  RESPONSE
+
+  s.gsub(WEBrick::LF, WEBrick::CRLF)
+end
+
+port = ARGV[0] || 4433
+
+settings = {
+  crt_file: '/etc/letsencrypt/live/thekuwayama.net/fullchain.pem',
+  key_file: '/etc/letsencrypt/live/thekuwayama.net/privkey.pem',
+  alpn: ['http/1.1']
+}
+
+q = Queue.new
+logger = Logger.new(STDERR, Logger::WARN)
+# rubocop: disable Metrics/BlockLength
+Etc.nprocessors.times do
+  Thread.start do
+    loop do
+      s = q.pop
+      Timeout.timeout(1) do
+        server = TTTLS13::Server.new(s, settings)
+        parser = HTTP::Parser.new
+
+        parser.on_message_complete = proc do
+          if !parser.http_method.nil?
+            logger.info 'Receive Request'
+            server.write(simple_http_response('TEST'))
+            server.close
+          else
+            logger.warn 'Not Request'
+          end
+        end
+
+        begin
+          server.accept
+          parser << server.read until server.eof?
+        rescue HTTP::Parser::Error, TTTLS13::Error::ErrorAlerts
+          logger.warn 'Parser Error'
+        ensure
+          server.close unless server.eof?
+          parser.reset!
+        end
+      end
+    rescue Timeout::Error
+      logger.warn 'Timeout'
+    ensure
+      s.close
+    end
+  end
+end
+# rubocop: enable Metrics/BlockLength
+
+Socket.tcp_server_loop(port) do |socket, _addr|
+  q << socket
+end

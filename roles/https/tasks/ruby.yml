@@ -1,0 +1,45 @@
+- name: Install "{{ packages }}"
+  yum:
+    name: "{{ packages }}"
+  vars:
+    packages:
+      - git-core
+      - gcc
+      - make
+      - openssl-devel
+      - readline-devel
+      - bzip2
+
+- name: Download rbenv
+  git:
+    repo: https://github.com/sstephenson/rbenv.git
+    dest: /opt/rbenv
+
+- name: Download ruby-build
+  git:
+    repo: https://github.com/sstephenson/ruby-build.git
+    dest: /opt/rbenv/plugins/ruby-build
+
+- name: Copy rbenv.sh
+  copy:
+    src: rbenv.sh
+    dest: /etc/profile.d/rbenv.sh
+    owner: root
+    group: root
+
+- name: Install ruby-2.6.3
+  shell: bash -lc "rbenv install --skip-existing 2.6.3"
+
+- name: Globalize ruby-2.6.3
+  shell: bash -lc "rbenv global 2.6.3"
+
+- name: Install gems
+  gem:
+    name: "{{ item.name }}"
+    version: "{{ item.version }}"
+    user_install: no
+    executable: /opt/rbenv/shims/gem
+  with_items:
+    - { name: timeout, version: 0.0.1 }
+    - { name: tttls1.3, version: 0.2.9 }
+    - { name: http_parser.rb, version: 0.6.0 }

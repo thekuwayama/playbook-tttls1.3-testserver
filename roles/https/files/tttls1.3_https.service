@@ -1,0 +1,16 @@
+[Unit]
+Description=tttls1.3 https server daemon
+
+[Service]
+ExecStart=/opt/rbenv/shims/ruby /opt/tttls1.3_https/server.rb 443
+ExecStop=/bin/kill -s QUIT $MAINPID
+WorkingDirectory=/opt/tttls1.3_https
+Restart=always
+Type=simple
+
+User=tttls1.3_https
+Group=wheel
+AmbientCapabilities=CAP_NET_BIND_SERVICE CAP_DAC_READ_SEARCH
+
+[Install]
+WantedBy=multi-user.target

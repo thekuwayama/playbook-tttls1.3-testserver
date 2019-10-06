@@ -1,0 +1,5 @@
+- name: private certificate
+  hosts: private_certificate
+  become: true
+  roles:
+    - private_certificate

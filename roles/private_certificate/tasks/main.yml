@@ -1,0 +1,22 @@
+- name: Install openssl
+  yum:
+    name: openssl
+
+- name: Make directory
+  file:
+    path: /etc/letsencrypt/live/thekuwayama.net/
+    state: directory
+    recurse: true
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Copy "{{ item }}"
+  copy:
+    src: "{{ item }}"
+    dest: /etc/letsencrypt/live/thekuwayama.net/{{ item }}
+    owner: root
+    group: root
+  with_items:
+    - fullchain.pem
+    - privkey.pem

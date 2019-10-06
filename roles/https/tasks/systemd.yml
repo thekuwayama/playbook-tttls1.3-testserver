@@ -1,0 +1,31 @@
+- name: Make directory
+  file:
+    path: /opt/tttls1.3_https
+    state: directory
+    recurse: true
+    owner: tttls1.3_https
+    group: wheel
+    mode: 0755
+
+- name: Copy server.rb
+  copy:
+    src: server.rb
+    dest: /opt/tttls1.3_https/server.rb
+    owner: tttls1.3_https
+    group: wheel
+    mode: 0644
+
+- name: Copy tttls1.3_https.service
+  copy:
+    src: tttls1.3_https.service
+    dest: /etc/systemd/system/tttls1.3_https.service
+    owner: root
+    group: root
+    mode: 0600
+
+- name: Enable tttls1.3_https.service
+  systemd:
+    name: tttls1.3_https.service
+    state: restarted
+    daemon_reload: yes
+    enabled: yes
