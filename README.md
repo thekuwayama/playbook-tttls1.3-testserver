@@ -1,3 +1,17 @@
+# playbook-tttls1.3-testserver
+
+
+## Set up python
+
+```bash
+$ source /path/to/virtualenv/bin/activate
+
+$ pip3 install -r requirements.txt
+```
+
+
+## Deploy
+
 ### dev
 
 ```bash
@@ -15,3 +29,18 @@ Check [https://localhost:4433](https://localhost:4433).
 ```bash
 $ docker ps -ql | xargs docker stop
 ```
+
+
+### prod
+
+ ```bash
+$ python gen_startup.py --user $USER --id_rsa_pub="`cat ~/.ssh/id_rsa.pub`" | pbcopy
+```
+
+Paste startup-script to settings.
+
+```bash
+$ ansible-playbook -i prod --ask-pass -c paramiko --user $USER certbot.yml https.yml
+```
+
+Check [https://thekuwayama.net](https://thekuwayama.net).

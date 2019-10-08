@@ -1,0 +1,9 @@
+ansible
+paramiko
+ansible-lint
+
+jinja2
+setuptools
+
+pycodestyle
+

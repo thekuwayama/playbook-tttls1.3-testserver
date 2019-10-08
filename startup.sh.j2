@@ -1,0 +1,17 @@
+#!/bin/bash
+
+LANG=C
+
+useradd -g wheel {{ user }}
+cat /dev/urandom | base64 | head -c 24 | xargs echo | passwd --stdin {{ user }}
+
+sed -ie 's/#\?PasswordAuthentication \(yes\|no\)/PasswordAuthentication no/g' /etc/ssh/sshd_config
+sed -ie 's/#\?PubkeyAuthentication \(yes\|no\)/PubkeyAuthentication yes/g' /etc/ssh/sshd_config
+
+mkdir -p /home/{{ user }}/.ssh
+chmod 700 /home/{{ user }}/.ssh
+echo {{ id_rsa_pub }} > /home/{{ user }}/.ssh/authorized_keys
+chmod 600 /home/{{ user }}/.ssh/authorized_keys
+chown -R {{ user }} /home/{{ user }}/.ssh
+
+systemctl restart sshd

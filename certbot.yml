@@ -1,0 +1,5 @@
+- name: certbot settings
+  hosts: certbot
+  become: true
+  roles:
+    - certbot
