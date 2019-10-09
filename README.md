@@ -44,13 +44,8 @@ Paste startup-script to settings.
 ```bash
 $ cd playbook
 
-$ ansible-playbook -i prod --ask-pass -c paramiko --user root certbot.yml https.yml sshd_config.yml
+$ ansible-playbook -i prod --user $USER certbot.yml https.yml sshd_config.yml
 ```
 
 Check [https://thekuwayama.net](https://thekuwayama.net).
 
-```bash
-$ cd playbook
-
-$ ansible-playbook -i prod -c paramiko --user $USER certbot.yml https.yml sshd_config.yml
-```
