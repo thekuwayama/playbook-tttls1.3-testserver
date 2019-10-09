@@ -4,7 +4,7 @@
 [private_certificate:vars]
 ansible_port=2222
 ansible_user=ansible
-ansible_ssh_private_key_file=./id_rsa
+ansible_ssh_private_key_file=../id_rsa
 
 [https]
 127.0.0.1
@@ -12,4 +12,4 @@ ansible_ssh_private_key_file=./id_rsa
 [https:vars]
 ansible_port=2222
 ansible_user=ansible
-ansible_ssh_private_key_file=./id_rsa
+ansible_ssh_private_key_file=../id_rsa

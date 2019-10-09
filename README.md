@@ -15,6 +15,8 @@ $ pip install -r requirements.txt
 ### dev
 
 ```bash
+$ cd playbook
+
 $ ssh-keygen -f ./id_rsa -t rsa -b 4096 -N ''
 
 $ docker build . -t playbook-tttls1.3-testserver/dev
@@ -40,7 +42,15 @@ $ python gen_startup.py --user $USER --id_rsa_pub="`cat ~/.ssh/id_rsa.pub`" | pb
 Paste startup-script to settings.
 
 ```bash
-$ ansible-playbook -i prod --ask-pass -c paramiko --user root certbot.yml https.yml
+$ cd playbook
+
+$ ansible-playbook -i prod --ask-pass -c paramiko --user root certbot.yml https.yml sshd_config.yml
 ```
 
 Check [https://thekuwayama.net](https://thekuwayama.net).
+
+```bash
+$ cd playbook
+
+$ ansible-playbook -i prod -c paramiko --user $USER certbot.yml https.yml sshd_config.yml
+```

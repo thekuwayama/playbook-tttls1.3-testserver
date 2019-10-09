@@ -3,7 +3,7 @@
 LANG=C
 
 useradd {{ user }}
-cat /dev/urandom | base64 | head -c 24 | xargs echo | passwd --stdin {{ user }}
+echo '{{ user }} ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/{{ user }}
 
 mkdir -p /home/{{ user }}/.ssh
 chmod 700 /home/{{ user }}/.ssh
