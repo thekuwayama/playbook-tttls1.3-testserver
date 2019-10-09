@@ -6,7 +6,7 @@
 ```bash
 $ source /path/to/virtualenv/bin/activate
 
-$ pip3 install -r requirements.txt
+$ pip install -r requirements.txt
 ```
 
 
@@ -40,7 +40,7 @@ $ python gen_startup.py --user $USER --id_rsa_pub="`cat ~/.ssh/id_rsa.pub`" | pb
 Paste startup-script to settings.
 
 ```bash
-$ ansible-playbook -i prod --ask-pass -c paramiko --user $USER certbot.yml https.yml
+$ ansible-playbook -i prod --ask-pass -c paramiko --user root certbot.yml https.yml
 ```
 
 Check [https://thekuwayama.net](https://thekuwayama.net).
