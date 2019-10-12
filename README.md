@@ -26,7 +26,7 @@ $ docker run --privileged -d -p 2222:22 -p 4433:443 playbook-tttls1.3-testserver
 $ ansible-playbook -i dev private_certificate.yml https.yml
 ```
 
-Check [https://localhost:4433](https://localhost:4433).
+Check [https://localhost:4433](https://localhost:4433)
 
 ```bash
 $ docker ps -ql | xargs docker stop
@@ -47,5 +47,4 @@ $ cd playbook
 $ ansible-playbook -i prod --user $USER certbot.yml https.yml sshd_config.yml
 ```
 
-Check [https://thekuwayama.net](https://thekuwayama.net).
-
+Check [https://thekuwayama.net](https://thekuwayama.net)
