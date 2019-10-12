@@ -1,23 +1,23 @@
 - name: Make directory
   file:
-    path: /opt/tttls1.3_https
+    path: "{{ https_server_directory }}"
     state: directory
     recurse: true
     owner: tttls1.3_https
     group: wheel
     mode: 0755
 
-- name: Copy server.rb
-  copy:
-    src: server.rb
-    dest: /opt/tttls1.3_https/server.rb
+- name: Template server.rb
+  template:
+    src: server.rb.j2
+    dest: "{{ https_server_directory }}/server.rb"
     owner: tttls1.3_https
     group: wheel
     mode: 0644
 
-- name: Copy tttls1.3_https.service
-  copy:
-    src: tttls1.3_https.service
+- name: Template tttls1.3_https.service
+  template:
+    src: tttls1.3_https.service.j2
     dest: /etc/systemd/system/tttls1.3_https.service
     owner: root
     group: root

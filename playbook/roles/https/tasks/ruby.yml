@@ -13,16 +13,16 @@
 - name: Download rbenv
   git:
     repo: https://github.com/sstephenson/rbenv.git
-    dest: /opt/rbenv
+    dest: "{{ rbenv_directory }}"
 
 - name: Download ruby-build
   git:
     repo: https://github.com/sstephenson/ruby-build.git
-    dest: /opt/rbenv/plugins/ruby-build
+    dest: "{{ rbenv_directory }}/plugins/ruby-build"
 
-- name: Copy rbenv.sh
-  copy:
-    src: rbenv.sh
+- name: Template rbenv.sh
+  template:
+    src: rbenv.sh.j2
     dest: /etc/profile.d/rbenv.sh
     owner: root
     group: root
@@ -38,7 +38,7 @@
     name: "{{ item.name }}"
     version: "{{ item.version }}"
     user_install: no
-    executable: /opt/rbenv/shims/gem
+    executable: "{{ rbenv_directory }}/shims/gem"
   with_items:
     - { name: timeout, version: 0.0.1 }
     - { name: tttls1.3, version: 0.2.9 }

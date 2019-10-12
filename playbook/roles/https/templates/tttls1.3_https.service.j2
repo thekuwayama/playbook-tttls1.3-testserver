@@ -2,9 +2,9 @@
 Description=tttls1.3 https server daemon
 
 [Service]
-ExecStart=/opt/rbenv/shims/ruby /opt/tttls1.3_https/server.rb 443
+ExecStart={{ rbenv_directory }}/shims/ruby {{ https_server_directory }}/server.rb 443
 ExecStop=/bin/kill -s QUIT $MAINPID
-WorkingDirectory=/opt/tttls1.3_https
+WorkingDirectory={{ https_server_directory }}
 Restart=always
 Type=simple
 

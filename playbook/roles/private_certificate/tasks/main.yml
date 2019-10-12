@@ -4,7 +4,7 @@
 
 - name: Make directory
   file:
-    path: /etc/letsencrypt/live/thekuwayama.net/
+    path: "/etc/letsencrypt/live/{{ domain }}/"
     state: directory
     recurse: true
     owner: root
@@ -14,7 +14,7 @@
 - name: Copy "{{ item }}"
   copy:
     src: "{{ item }}"
-    dest: /etc/letsencrypt/live/thekuwayama.net/{{ item }}
+    dest: "/etc/letsencrypt/live/{{ domain }}/{{ item }}"
     owner: root
     group: root
   with_items:

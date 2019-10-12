@@ -27,8 +27,8 @@ end
 port = ARGV[0] || 4433
 
 settings = {
-  crt_file: '/etc/letsencrypt/live/thekuwayama.net/fullchain.pem',
-  key_file: '/etc/letsencrypt/live/thekuwayama.net/privkey.pem',
+  crt_file: '/etc/letsencrypt/live/{{ domain }}/fullchain.pem',
+  key_file: '/etc/letsencrypt/live/{{ domain }}/privkey.pem',
   alpn: ['http/1.1']
 }
 
