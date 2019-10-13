@@ -20,7 +20,7 @@
   get_url:
     url: "https://www.openssl.org/source/openssl-{{ openssl_version }}.tar.gz"
     dest: "{{ openssl_directory_prefix }}/src/openssl-{{ openssl_version }}.tar.gz"
-    checksum: sha256:2836875a0f89c03d0fdf483941512613a50cfb421d6fd94b9f41d7279d586a3d
+    checksum: "sha256:{{ openssl_file_sha256 }}"
   when: openssl_version_check.rc != 0
 
 - name: Unarchive openssl
@@ -75,7 +75,7 @@
     group: root
 
 - name: Install ruby-2.6.3
-  shell: CONFIGURE_OPTS="--with-openssl-dir={{ openssl_directory }}" bash -lc "rbenv install --skip-existing 2.6.3"
+  shell: CONFIGURE_OPTS="--with-openssl-dir={{ openssl_directory }}" bash -lc "rbenv install 2.6.3"
 
 - name: Globalize ruby-2.6.3
   shell: bash -lc "rbenv global 2.6.3"
