@@ -80,7 +80,7 @@
   register: ruby_openssl_version_check
 
 - name: Install ruby
-  shell: CONFIGURE_OPTS="--with-openssl-dir={{ openssl_directory }}" bash -lc "rbenv install {{ ruby_version }}"
+  shell: CONFIGURE_OPTS="--with-openssl-dir={{ openssl_directory }}" bash -lc "rbenv install --force {{ ruby_version }}"
   when: ruby_openssl_version_check.rc != 0
 
 - name: Globalize ruby
