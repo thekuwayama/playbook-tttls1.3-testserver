@@ -74,8 +74,14 @@
     owner: root
     group: root
 
+- name: Check ruby version and openssl version installed with ruby
+  shell: bash -lc "ruby --version | grep 2.6.3 && ruby -ropenssl -e'puts OpenSSL::OPENSSL_VERSION' | grep {{ openssl_version }}"
+  ignore_errors: True
+  register: ruby_openssl_version_check
+
 - name: Install ruby-2.6.3
   shell: CONFIGURE_OPTS="--with-openssl-dir={{ openssl_directory }}" bash -lc "rbenv install 2.6.3"
+  when: ruby_openssl_version_check.rc != 0
 
 - name: Globalize ruby-2.6.3
   shell: bash -lc "rbenv global 2.6.3"
