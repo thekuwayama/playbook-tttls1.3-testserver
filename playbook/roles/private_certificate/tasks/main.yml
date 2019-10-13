@@ -11,7 +11,7 @@
     group: root
     mode: 0644
 
-- name: Copy "{{ item }}"
+- name: Copy private certificate
   copy:
     src: "{{ item }}"
     dest: "/etc/letsencrypt/live/{{ domain }}/{{ item }}"

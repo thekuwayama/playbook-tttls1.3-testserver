@@ -6,9 +6,56 @@
       - git-core
       - gcc
       - make
-      - openssl-devel
       - readline-devel
       - bzip2
+      - perl-core
+      - zlib-devel
+
+- name: Check whether openssl is installed
+  shell: bash -lc "openssl version | grep {{ openssl_version }}"
+  ignore_errors: True
+  register: openssl_version_check
+
+- name: Download openssl
+  get_url:
+    url: "https://www.openssl.org/source/openssl-{{ openssl_version }}.tar.gz"
+    dest: "{{ openssl_directory_prefix }}/src/openssl-{{ openssl_version }}.tar.gz"
+    checksum: sha256:2836875a0f89c03d0fdf483941512613a50cfb421d6fd94b9f41d7279d586a3d
+  when: openssl_version_check.rc != 0
+
+- name: Unarchive openssl
+  unarchive:
+    src: "{{ openssl_directory_prefix }}/src/openssl-{{ openssl_version }}.tar.gz"
+    dest: "{{ openssl_directory_prefix }}/src"
+    remote_src: yes
+  when: openssl_version_check.rc != 0
+
+- name: Install openssl
+  shell: |
+    ./config --prefix={{ openssl_directory }} shared zlib
+    make depend
+    make
+    make install
+  args:
+    chdir: "{{ openssl_directory_prefix }}/src/openssl-{{ openssl_version }}"
+  when: openssl_version_check.rc != 0
+
+- name: Template openssl.sh
+  template:
+    src: openssl.sh.j2
+    dest: /etc/profile.d/openssl.sh
+    owner: root
+    group: root
+
+- name: Template openssl.conf
+  template:
+    src: openssl.conf.j2
+    dest: /etc/ld.so.conf.d/openssl.conf
+    owner: root
+    group: root
+
+- name: Configure openssl library path
+  shell: ldconfig
 
 - name: Download rbenv
   git:
@@ -28,7 +75,7 @@
     group: root
 
 - name: Install ruby-2.6.3
-  shell: bash -lc "rbenv install --skip-existing 2.6.3"
+  shell: CONFIGURE_OPTS="--with-openssl-dir={{ openssl_directory }}" bash -lc "rbenv install --skip-existing 2.6.3"
 
 - name: Globalize ruby-2.6.3
   shell: bash -lc "rbenv global 2.6.3"

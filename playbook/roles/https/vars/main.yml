@@ -1,2 +1,5 @@
 rbenv_directory: /opt/rbenv
 https_server_directory: /opt/tttls1.3_https
+openssl_version: 1.1.1
+openssl_directory_prefix: /usr/local/
+openssl_directory: "{{ openssl_directory_prefix }}/openssl-{{ openssl_version }}"
