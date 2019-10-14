@@ -15,6 +15,13 @@
     group: wheel
     mode: 0644
 
+- name: Copy index.html
+  copy:
+    src: index.html
+    dest: "{{ https_server_directory }}/index.html"
+    owner: tttls1.3_https
+    group: wheel
+
 - name: Template tttls1.3_https.service
   template:
     src: tttls1.3_https.service.j2
