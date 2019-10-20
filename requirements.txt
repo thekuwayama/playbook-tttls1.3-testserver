@@ -1,9 +1,6 @@
 ansible
-paramiko
 ansible-lint
-
 jinja2
-setuptools
-
+paramiko
 pycodestyle
-
+setuptools

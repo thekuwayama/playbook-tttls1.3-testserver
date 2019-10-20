@@ -23,7 +23,7 @@ $ docker build . -t playbook-tttls1.3-testserver/dev
 
 $ docker run --privileged -d -p 2222:22 -p 4433:443 playbook-tttls1.3-testserver/dev /sbin/init
 
-$ ansible-playbook -i dev private_certificate.yml https.yml
+$ ansible-playbook --ask-vault-pass -i dev private_certificate.yml https.yml paranoids.yml
 ```
 
 Check [https://localhost:4433](https://localhost:4433)
@@ -44,7 +44,7 @@ Paste startup-script to settings.
 ```bash
 $ cd playbook
 
-$ ansible-playbook -i prod --user $USER certbot.yml https.yml sshd_config.yml
+$ ansible-playbook --ask-vault-pass -i prod --user $USER certbot.yml https.yml sshd_config.yml paranoids.yml
 ```
 
 Check [https://thekuwayama.net](https://thekuwayama.net)

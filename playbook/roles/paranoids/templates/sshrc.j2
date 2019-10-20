@@ -1,0 +1,9 @@
+#!/bin/bash
+
+TIME=`date`
+SOURCE_IP=${SSH_CLIENT%% *}
+MESSAGE="Someone has logined:\n\t${TIME}\n\t${SOURCE_IP}"
+
+curl -X POST \
+     --data-urlencode 'payload={"username": "paranoids", "icon_emoji": ":alien:", "text": "'"${MESSAGE}"'"}' {{ slack_incoming_webhook_url }} \
+     &> /dev/null

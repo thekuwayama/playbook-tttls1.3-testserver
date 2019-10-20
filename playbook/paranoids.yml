@@ -1,0 +1,5 @@
+- name: paranoids monitoring
+  hosts: paranoids
+  become: true
+  roles:
+    - paranoids
