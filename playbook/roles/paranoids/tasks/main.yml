@@ -5,3 +5,36 @@
     owner: root
     group: root
     mode: 0755
+
+- name: Install "{{ packages }}"
+  yum:
+    name: "{{ packages }}"
+  vars:
+    packages:
+      - iproute
+      - crontabs
+
+- name: Make directory
+  file:
+    path: /opt/paranoids
+    state: directory
+    recurse: true
+    owner: root
+    group: root
+    mode: 0755
+
+- name: Template paranoids_ss.sh
+  template:
+    src: paranoids_ss.sh.j2
+    dest: /opt/paranoids/paranoids_ss.sh
+    owner: root
+    group: root
+    mode: 0755
+
+- name: Set crontab to monitor dest-ports
+  cron:
+    name: 'monitoring dest-ports'
+    minute: '*/5'
+    job: /bin/bash /opt/paranoids/paranoids_ss.sh
+    cron_file: paranoids_ss
+    user: root

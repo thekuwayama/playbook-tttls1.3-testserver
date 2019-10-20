@@ -1,0 +1,10 @@
+#!/bin/bash
+
+SS=`ss --tcp --udp --raw --no-header '( dport != :ntp )'`
+MESSAGE="Someone has accessed:\n\t${SS}"
+
+if [[ $SS ]]; then
+   curl -X POST \
+        --data-urlencode 'payload={"username": "paranoids", "icon_emoji": ":alien:", "text": "'"$MESSAGE"'"}' {{ slack_incoming_webhook_url }} \
+        &> /dev/null
+fi
