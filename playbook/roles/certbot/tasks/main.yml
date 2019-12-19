@@ -13,11 +13,11 @@
   register: privkey
 
 - name: Issue a certificate with ACME
-  shell: bash -lc "certbot certonly --standalone --domain {{ domain }} --email {{ certbot_email }} --agree-tos --no-eff-email"
+  shell: bash -lc "certbot certonly --standalone --domain {{ domain }} --email {{ certbot_email }} --agree-tos --no-eff-email --pre-hook 'systemctl stop tttls1.3_https'"
   when: fullchain.stat.exists == False or privkey.stat.exists == False
 
 - name: Renew a certificate
-  shell: bash -lc "certbot renew"
+  shell: bash -lc 'certbot renew --pre-hook "systemctl stop tttls1.3_https" --max-log-backups 10'
   when: not (fullchain.stat.exists == False or privkey.stat.exists == False)
 
 - name: Set crontab of certbot
@@ -26,6 +26,6 @@
     weekday: '0'
     hour: '2'
     minute: '0'
-    job: 'certbot renew'
+    job: 'sleep $(expr $RANDOM / 120) && certbot renew --pre-hook "systemctl stop tttls1.3_https" --post-hook "systemctl start tttls1.3_https" --max-log-backups 10'
     cron_file: certbot_renew
     user: root
