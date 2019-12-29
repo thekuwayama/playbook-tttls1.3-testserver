@@ -13,7 +13,7 @@
   register: privkey
 
 - name: Issue a certificate with ACME
-  shell: bash -lc "certbot certonly --standalone --domain {{ domain }} --email {{ certbot_email }} --agree-tos --no-eff-email --pre-hook 'systemctl stop tttls1.3_https'"
+  shell: bash -lc "certbot certonly --standalone --domain {{ domain }} --domain www.{{ domain }} --email {{ certbot_email }} --agree-tos --no-eff-email --pre-hook 'systemctl stop tttls1.3_https'"
   when: fullchain.stat.exists == False or privkey.stat.exists == False
 
 - name: Renew a certificate
