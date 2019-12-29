@@ -17,6 +17,7 @@ def simple_http_response(body)
     Content-Type: text/html
     Content-Length: #{body.length}
     Server: tttls1.3 https server
+    Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
   HEADER_EOS
 
   h.gsub(WEBrick::LF, WEBrick::CRLF) + WEBrick::CRLF + body
