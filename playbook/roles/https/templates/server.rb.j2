@@ -27,7 +27,8 @@ http_response_body = File.open('{{ https_server_directory }}/index.html', 'r').r
 http_response = simple_http_response(http_response_body)
 
 settings = {
-  crt_file: '/etc/letsencrypt/live/{{ domain }}/fullchain.pem',
+  crt_file: '/etc/letsencrypt/live/{{ domain }}/cert.pem',
+  chain_files: ['/etc/letsencrypt/live/{{ domain }}/chain.pem'],
   key_file: '/etc/letsencrypt/live/{{ domain }}/privkey.pem',
   alpn: ['http/1.1']
 }
