@@ -34,7 +34,7 @@
 - name: Set crontab to monitor dest-ports
   cron:
     name: 'monitoring dest-ports'
-    minute: '*/5'
+    minute: '*/1'
     job: /bin/bash /opt/paranoids/paranoids_ss.sh
     cron_file: paranoids_ss
     user: root
