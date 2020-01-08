@@ -94,5 +94,5 @@
     executable: "{{ rbenv_directory }}/shims/gem"
   with_items:
     - { name: timeout, version: 0.0.1 }
-    - { name: tttls1.3, version: 0.2.12 }
+    - { name: tttls1.3, version: 0.2.13 }
     - { name: http_parser.rb, version: 0.6.0 }
