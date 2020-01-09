@@ -27,11 +27,22 @@ port = ARGV[0] || 4433
 http_response_body = File.open('{{ https_server_directory }}/index.html', 'r').read
 http_response = simple_http_response(http_response_body)
 
+process_ocsp_response = lambda do
+  return nil unless File.exist?('/tmp/ocsp_response.der')
+
+  der = File.binread('/tmp/ocsp_response.der')
+  ocsp_response = OpenSSL::OCSP::Response.new(der)
+  return nil if ocsp_response.basic.status.first[5] < Time.now
+
+  ocsp_response
+end
+
 settings = {
   crt_file: '/etc/letsencrypt/live/{{ domain }}/cert.pem',
   chain_files: ['/etc/letsencrypt/live/{{ domain }}/chain.pem'],
   key_file: '/etc/letsencrypt/live/{{ domain }}/privkey.pem',
-  alpn: ['http/1.1']
+  alpn: ['http/1.1'],
+  process_ocsp_response: process_ocsp_response
 }
 
 q = Queue.new

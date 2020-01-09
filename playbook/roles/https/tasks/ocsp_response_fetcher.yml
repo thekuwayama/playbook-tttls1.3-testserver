@@ -1,0 +1,45 @@
+- name: Make directory
+  file:
+    path: "{{ ocsp_response_fetcher_directory }}"
+    state: directory
+    recurse: true
+    owner: root
+    mode: 0755
+
+- name: Copy ocsp_response_fetcher.rb
+  copy:
+    src: ocsp_response_fetcher.rb
+    dest: "{{ ocsp_response_fetcher_directory }}/ocsp_response_fetcher.rb"
+    owner: root
+    mode: 0644
+
+- name: Copy job.rb
+  copy:
+    src: job.rb
+    dest: "{{ ocsp_response_fetcher_directory }}/job.rb"
+    owner: root
+    mode: 0644
+
+- name: Install "{{ packages }}"
+  yum:
+    name: "{{ packages }}"
+  vars:
+    packages:
+      - crontabs
+
+- name: Set OCSP Response fetcher
+  block:
+    - name: Initial fetch
+      shell: bash -lc "{{ ocsp_response_fetcher_job }}"
+      ignore_errors: True
+    - name: Set crontab
+      cron:
+        name: 'ocsp_response_fetcher'
+        weekday: '0'
+        hour: '2'
+        minute: '0'
+        job: "{{ ocsp_response_fetcher_job }}"
+        cron_file: ocsp_response_fetcher
+        user: root
+  vars:
+    ocsp_response_fetcher_job: "{{ rbenv_directory }}/shims/ruby {{ ocsp_response_fetcher_directory }}/job.rb /etc/letsencrypt/live/{{ domain }}/cert.pem /etc/letsencrypt/live/{{ domain }}/chain.pem {{ ocsp_response_fetcher_cache_file }}"
