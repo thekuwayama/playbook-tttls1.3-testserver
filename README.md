@@ -1,5 +1,7 @@
 # playbook-tttls1.3-testserver
 
+[![Actions Status](https://github.com/thekuwayama/playbook-tttls1.3-testserver/workflows/workflow/badge.svg)](https://github.com/thekuwayama/playbook-tttls1.3-testserver/actions?query=workflow=.github/workflows/main.yml)
+
 
 ## Set up python
 

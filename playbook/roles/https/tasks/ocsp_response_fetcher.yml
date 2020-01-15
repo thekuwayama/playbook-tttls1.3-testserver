@@ -42,4 +42,8 @@
         cron_file: ocsp_response_fetcher
         user: root
   vars:
-    ocsp_response_fetcher_job: "{{ rbenv_directory }}/shims/ruby {{ ocsp_response_fetcher_directory }}/job.rb /etc/letsencrypt/live/{{ domain }}/cert.pem /etc/letsencrypt/live/{{ domain }}/chain.pem {{ ocsp_response_fetcher_cache_file }}"
+    ocsp_response_fetcher_job: "{{ rbenv_directory }}/shims/ruby
+     {{ ocsp_response_fetcher_directory }}/job.rb
+     /etc/letsencrypt/live/{{ domain }}/cert.pem
+     /etc/letsencrypt/live/{{ domain }}/chain.pem
+     {{ ocsp_response_fetcher_cache_file }}"

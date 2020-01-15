@@ -102,7 +102,8 @@ class OCSPResponseFetcher
       return nil
     end
 
-    store = OpenSSL::X509::Store.new.set_default_paths
+    store = OpenSSL::X509::Store.new
+    store.set_default_paths
     unless ocsp_response.basic.verify(certs, store)
       @logger.warn("OCSPResponse's signature is invalid")
       return nil
