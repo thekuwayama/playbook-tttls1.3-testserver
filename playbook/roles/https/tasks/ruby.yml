@@ -98,3 +98,17 @@
     - { name: openssl, version: 2.1.2 }
     - { name: timeout, version: 0.0.1 }
     - { name: tttls1.3, version: 0.2.13 }
+
+- name: Make directory
+  file:
+    path: "{{ openssl_directory }}/ssl"
+    state: directory
+    recurse: true
+    owner: root
+    mode: 0755
+
+- name: Install cacert.pem
+  get_url:
+    url: https://curl.haxx.se/ca/cacert.pem
+    dest: "{{ openssl_directory }}/ssl/cert.pem"
+    force: yes
