@@ -1,36 +1,20 @@
-- name: Make directory
-  file:
-    path: "{{ ocsp_response_fetcher_directory }}"
-    state: directory
-    recurse: true
-    owner: root
-    mode: 0755
-
-- name: Copy ocsp_response_fetcher.rb
-  copy:
-    src: ocsp_response_fetcher.rb
-    dest: "{{ ocsp_response_fetcher_directory }}/ocsp_response_fetcher.rb"
-    owner: root
-    mode: 0644
-
-- name: Copy job.rb
-  copy:
-    src: job.rb
-    dest: "{{ ocsp_response_fetcher_directory }}/job.rb"
-    owner: root
-    mode: 0644
-
-- name: Install "{{ packages }}"
-  yum:
-    name: "{{ packages }}"
-  vars:
-    packages:
-      - crontabs
+- name: Install gems
+  gem:
+    name: "{{ item.name }}"
+    version: "{{ item.version }}"
+    user_install: no
+    executable: "{{ rbenv_directory }}/shims/gem"
+  with_items:
+    - { name: ocsprf, version: 0.0.1 }
 
 - name: Set OCSP Response fetcher
   block:
     - name: Initial fetch
-      shell: bash -lc "{{ ocsp_response_fetcher_job }}"
+      shell:
+        cmd: "{{ ocsp_response_fetcher_job }}"
+        creates:
+          - "{{ ocsp_response_fetcher_cache_file }}"
+          - "{{ ocsp_response_fetcher_cache_file }}.tmp"
       ignore_errors: True
     - name: Set crontab
       cron:
@@ -42,8 +26,9 @@
         cron_file: ocsp_response_fetcher
         user: root
   vars:
-    ocsp_response_fetcher_job: "{{ rbenv_directory }}/shims/ruby
-     {{ ocsp_response_fetcher_directory }}/job.rb
+    ocsp_response_fetcher_job: "{{ rbenv_directory }}/shims/ocsprf
      /etc/letsencrypt/live/{{ domain }}/cert.pem
-     /etc/letsencrypt/live/{{ domain }}/chain.pem
-     {{ ocsp_response_fetcher_cache_file }}"
+     --issuer /etc/letsencrypt/live/{{ domain }}/chain.pem
+     --verbose > {{ ocsp_response_fetcher_cache_file }}.tmp &&
+     mv {{ ocsp_response_fetcher_cache_file }}.tmp {{ ocsp_response_fetcher_cache_file }};
+     rm -f {{ ocsp_response_fetcher_cache_file }}.tmp"
