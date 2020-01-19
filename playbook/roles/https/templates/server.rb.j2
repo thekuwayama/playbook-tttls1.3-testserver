@@ -23,18 +23,18 @@ def simple_http_response(body)
   h.gsub(WEBrick::LF, WEBrick::CRLF) + WEBrick::CRLF + body
 end
 
-port = ARGV[0] || 4433
+port = ARGV[0] || 443
 http_response_body = File.open('{{ https_server_directory }}/index.html', 'r').read
 http_response = simple_http_response(http_response_body)
 
 process_ocsp_response = lambda do
-  return nil unless File.exist?('/tmp/ocsp_response.der')
-
   der = File.binread('/tmp/ocsp_response.der')
   ocsp_response = OpenSSL::OCSP::Response.new(der)
   return nil if ocsp_response.basic.status.first[5] < Time.now
 
   ocsp_response
+rescue Errno::ENOENT, OpenSSL::OCSP::OCSPError
+  return nil
 end
 
 settings = {
