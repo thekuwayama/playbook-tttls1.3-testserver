@@ -10,6 +10,11 @@ require 'timeout'
 require 'tttls1.3'
 require 'webrick'
 
+CRT_FILE_PATH = '/etc/letsencrypt/live/{{ domain }}/cert.pem'
+CHAIN_FILE_PATH = '/etc/letsencrypt/live/{{ domain }}/chain.pem'
+KEY_FILE_PATH = '/etc/letsencrypt/live/{{ domain }}/privkey.pem'
+INDEX_FILE_PATH = '{{ https_server_directory }}/index.html'
+
 def simple_http_response(body)
   h = <<~HEADER_EOS
     HTTP/1.1 200 OK
@@ -22,15 +27,18 @@ def simple_http_response(body)
 
   h.gsub(WEBrick::LF, WEBrick::CRLF) + WEBrick::CRLF + body
 end
-
-port = ARGV[0] || 443
-http_response_body = File.open('{{ https_server_directory }}/index.html', 'r').read
+http_response_body = File.read(INDEX_FILE_PATH)
 http_response = simple_http_response(http_response_body)
 
+cid = OpenSSL::OCSP::CertificateId.new(
+  OpenSSL::X509::Certificate.new(File.read(CRT_FILE_PATH)),
+  OpenSSL::X509::Certificate.new(File.read(CHAIN_FILE_PATH))
+)
 process_ocsp_response = lambda do
-  der = File.binread('/tmp/ocsp_response.der')
+  der = File.binread('{{ ocsp_response_fetcher_cache_file }}')
   ocsp_response = OpenSSL::OCSP::Response.new(der)
-  return nil if ocsp_response.basic.status.first[5] < Time.now
+  status = ocsp_response.basic.find_response(cid)
+  return nil if status.nil? || status.next_update < Time.now
 
   ocsp_response
 rescue Errno::ENOENT, OpenSSL::OCSP::OCSPError
@@ -38,9 +46,9 @@ rescue Errno::ENOENT, OpenSSL::OCSP::OCSPError
 end
 
 settings = {
-  crt_file: '/etc/letsencrypt/live/{{ domain }}/cert.pem',
-  chain_files: ['/etc/letsencrypt/live/{{ domain }}/chain.pem'],
-  key_file: '/etc/letsencrypt/live/{{ domain }}/privkey.pem',
+  crt_file: CRT_FILE_PATH,
+  chain_files: [CHAIN_FILE_PATH],
+  key_file: KEY_FILE_PATH,
   alpn: ['http/1.1'],
   process_ocsp_response: process_ocsp_response
 }
@@ -85,6 +93,7 @@ Etc.nprocessors.times do
 end
 # rubocop: enable Metrics/BlockLength
 
+port = ARGV[0] || 443
 Socket.tcp_server_loop(port) do |socket, _addr|
   q << socket
 end
