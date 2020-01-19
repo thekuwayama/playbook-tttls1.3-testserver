@@ -19,10 +19,9 @@
     - name: Set crontab
       cron:
         name: 'ocsp_response_fetcher'
-        weekday: '0'
-        hour: '2'
+        hour: '*/1'
         minute: '0'
-        job: "{{ ocsp_response_fetcher_job }}"
+        job: "sleep $(($RANDOM % 120)); {{ ocsp_response_fetcher_job }}"
         cron_file: ocsp_response_fetcher
         user: root
   vars:
