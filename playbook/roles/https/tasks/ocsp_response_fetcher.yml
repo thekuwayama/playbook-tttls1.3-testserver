@@ -5,7 +5,7 @@
     user_install: no
     executable: "{{ rbenv_directory }}/shims/gem"
   with_items:
-    - { name: ocsprf, version: 0.0.1 }
+    - { name: ocsprf, version: 0.0.2 }
 
 - name: Set OCSP Response fetcher
   block:
@@ -28,6 +28,4 @@
     ocsp_response_fetcher_job: "{{ rbenv_directory }}/shims/ocsprf
      /etc/letsencrypt/live/{{ domain }}/cert.pem
      --issuer /etc/letsencrypt/live/{{ domain }}/chain.pem
-     --verbose > {{ ocsp_response_fetcher_cache_file }}.tmp &&
-     mv {{ ocsp_response_fetcher_cache_file }}.tmp {{ ocsp_response_fetcher_cache_file }};
-     rm -f {{ ocsp_response_fetcher_cache_file }}.tmp"
+     --verbose --output {{ ocsp_response_fetcher_cache_file }}"
