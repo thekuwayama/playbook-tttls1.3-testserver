@@ -14,7 +14,6 @@
         cmd: "{{ ocsp_response_fetcher_job }}"
         creates:
           - "{{ ocsp_response_fetcher_cache_file }}"
-          - "{{ ocsp_response_fetcher_cache_file }}.tmp"
       ignore_errors: True
     - name: Set crontab
       cron:
