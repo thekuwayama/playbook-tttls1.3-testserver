@@ -27,7 +27,7 @@
     weekday: '0'
     hour: '2'
     minute: '0'
-    job: 'sleep $(expr $RANDOM / 120) && certbot renew --pre-hook "systemctl stop tttls1.3_https"
+    job: 'certbot renew --pre-hook "systemctl stop tttls1.3_https"
      --post-hook "systemctl start tttls1.3_https" --max-log-backups 10'
     cron_file: certbot_renew
     user: root
