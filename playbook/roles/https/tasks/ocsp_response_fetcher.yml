@@ -21,7 +21,7 @@
         weekday: '6'
         hour: '22'
         minute: '0'
-        job: "sleep $(expr $RANDOM / 120) && {{ ocsp_response_fetcher_job }}"
+        job: "/usr/bin/sleep $(/usr/bin/expr $RANDOM / 120) && {{ ocsp_response_fetcher_job }}"
         cron_file: ocsp_response_fetcher
         user: root
   vars:
