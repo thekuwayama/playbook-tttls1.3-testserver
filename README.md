@@ -17,13 +17,13 @@ $ pip install -r requirements.txt
 ### dev
 
 ```bash
-$ cd playbook
-
 $ ssh-keygen -f ./id_rsa -t rsa -b 4096 -N ''
 
 $ docker build . -t playbook-tttls1.3-testserver/dev
 
 $ docker run --privileged -d -p 2222:22 -p 4433:443 playbook-tttls1.3-testserver/dev /sbin/init
+
+$ cd playbook
 
 $ ansible-playbook --ask-vault-pass -i dev private_certificate.yml https.yml paranoids.yml
 ```
