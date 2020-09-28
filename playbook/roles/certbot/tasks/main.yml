@@ -13,12 +13,22 @@
   register: privkey
 
 - name: Issue a certificate with ACME
-  shell: bash -lc "certbot certonly --standalone --domain {{ domain }} --domain www.{{ domain }}
-   --email {{ certbot_email }} --agree-tos --no-eff-email --pre-hook 'systemctl stop tttls1.3_https'"
+  shell: bash -lc "certbot certonly
+   --standalone
+   --domain {{ domain }}
+   --domain www.{{ domain }}
+   --email {{ certbot_email }}
+   --agree-tos
+   --no-eff-email
+   --pre-hook 'systemctl stop tttls1.3_https'
+   --preferred-chain 'ISRG Root X1'"
   when: not (fullchain.stat.exists and privkey.stat.exists)
 
 - name: Renew a certificate
-  shell: bash -lc 'certbot renew --pre-hook "systemctl stop tttls1.3_https" --max-log-backups 10'
+  shell: bash -lc 'certbot renew
+   --pre-hook "systemctl stop tttls1.3_https"
+   --max-log-backups 10
+   --preferred-chain "ISRG Root X1"'
   when: fullchain.stat.exists and privkey.stat.exists
 
 - name: Set crontab of certbot
@@ -27,7 +37,10 @@
     weekday: '0'
     hour: '2'
     minute: '0'
-    job: '/usr/bin/certbot renew --pre-hook "/usr/bin/systemctl stop tttls1.3_https"
-     --post-hook "/usr/bin/systemctl start tttls1.3_https" --max-log-backups 10'
+    job: '/usr/bin/certbot renew
+     --pre-hook "/usr/bin/systemctl stop tttls1.3_https"
+     --post-hook "/usr/bin/systemctl start tttls1.3_https"
+     --max-log-backups 10
+     --preferred-chain "ISRG Root X1"'
     cron_file: certbot_renew
     user: root
