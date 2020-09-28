@@ -28,4 +28,4 @@ jobs:
           ansible-lint --version
           ansible-playbook -i playbook/dev playbook/{private_certificate,https}.yml --syntax-check
           ansible-playbook -i playbook/prod playbook/{certbot,https,sshd_config}.yml --syntax-check
-          ansible-lint playbook/roles/*/tasks/**.yml
+          find playbook/roles -type f -name '*.yml' | grep -v playbook/roles/paranoids/vars/main.yml | xargs -L1 -I{} ansible-lint {}
