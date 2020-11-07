@@ -97,7 +97,7 @@
     - { name: logger, version: 1.4.2 }
     - { name: openssl, version: 2.2.0 }
     - { name: timeout, version: 0.1.0 }
-    - { name: tttls1.3, version: 0.2.14 }
+    - { name: tttls1.3, version: 0.2.15 }
 
 - name: Make directory
   file:
