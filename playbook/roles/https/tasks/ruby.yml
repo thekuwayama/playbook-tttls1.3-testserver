@@ -93,11 +93,12 @@
     user_install: no
     executable: "{{ rbenv_directory }}/shims/gem"
   with_items:
-    - { name: http_parser.rb, version: 0.6.0 }
-    - { name: logger, version: 1.4.2 }
+    - { name: http_parser.rb, version: 0.7.0 }
+    - { name: logger, version: 1.4.3 }
     - { name: openssl, version: 2.2.0 }
-    - { name: timeout, version: 0.1.0 }
+    - { name: timeout, version: 0.1.1 }
     - { name: tttls1.3, version: 0.2.15 }
+    - { name: webrick, version: 1.7.0 }
 
 - name: Make directory
   file:
