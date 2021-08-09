@@ -46,6 +46,7 @@
     dest: /etc/profile.d/openssl.sh
     owner: root
     group: root
+    mode: 0755
 
 - name: Template openssl.conf
   template:
@@ -53,18 +54,22 @@
     dest: /etc/ld.so.conf.d/openssl.conf
     owner: root
     group: root
+    mode: 0644
 
 - name: Configure openssl library path
-  shell: ldconfig
+  command:
+    cmd: ldconfig
 
 - name: Download rbenv
   git:
     repo: https://github.com/sstephenson/rbenv.git
+    version: "{{ rbenv_version }}"
     dest: "{{ rbenv_directory }}"
 
 - name: Download ruby-build
   git:
     repo: https://github.com/sstephenson/ruby-build.git
+    version: "{{ ruby_build_version }}"
     dest: "{{ rbenv_directory }}/plugins/ruby-build"
 
 - name: Template rbenv.sh
@@ -73,6 +78,7 @@
     dest: /etc/profile.d/rbenv.sh
     owner: root
     group: root
+    mode: 0755
 
 - name: Check ruby version and openssl version installed with ruby
   shell: bash -lc "ruby --version | grep {{ ruby_version }} && ruby -ropenssl -e'puts OpenSSL::OPENSSL_VERSION' | grep {{ openssl_version }}"
@@ -80,11 +86,14 @@
   register: ruby_openssl_version_check
 
 - name: Install ruby
-  shell: CONFIGURE_OPTS="--with-openssl-dir={{ openssl_directory }}" bash -lc "rbenv install --force {{ ruby_version }}"
+  command:
+    cmd: bash -lc "rbenv install --force {{ ruby_version }}"
+  environment:
+    CONFIGURE_OPTS: "--with-openssl-dir={{ openssl_directory }}"
   when: ruby_openssl_version_check.rc != 0
 
 - name: Globalize ruby
-  shell: bash -lc "rbenv global {{ ruby_version }}"
+  command: bash -lc "rbenv global {{ ruby_version }}"
 
 - name: Install gems
   gem:

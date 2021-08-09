@@ -1,3 +1,7 @@
+- name: Install crontabs
+  yum:
+    name: crontabs
+
 - name: Install gems
   gem:
     name: "{{ item.name }}"
@@ -10,7 +14,7 @@
 - name: Set OCSP Response fetcher
   block:
     - name: Initial fetch
-      shell:
+      command:
         cmd: "{{ ocsp_response_fetcher_job }}"
         creates:
           - "{{ ocsp_response_fetcher_cache_file }}"

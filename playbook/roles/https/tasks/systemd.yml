@@ -21,6 +21,7 @@
     dest: "{{ https_server_directory }}/index.html"
     owner: tttls1.3_https
     group: wheel
+    mode: 0644
 
 - name: Template tttls1.3_https.service
   template:
