@@ -54,6 +54,10 @@ settings = {
   cipher_suites: [
     TTTLS13::CipherSuite::TLS_CHACHA20_POLY1305_SHA256,
     TTTLS13::CipherSuite::TLS_AES_256_GCM_SHA384
+  ],
+  supported_groups: [
+    TTTLS13::NamedGroup::SECP384R1,
+    TTTLS13::NamedGroup::SECP521R1
   ]
 }
 
