@@ -16,6 +16,7 @@
   command:
     cmd: bash -lc "certbot certonly
       --standalone
+      --rsa-key-size 4096
       --domain {{ domain }}
       --domain www.{{ domain }}
       --email {{ certbot_email }}
@@ -29,6 +30,7 @@
   command:
     cmd: bash -lc 'certbot renew
       --pre-hook "systemctl stop tttls1.3_https"
+      --rsa-key-size 4096
       --max-log-backups 10
       --preferred-chain "ISRG Root X1"'
   when: fullchain.stat.exists and privkey.stat.exists
@@ -40,9 +42,10 @@
     hour: '2'
     minute: '0'
     job: '/usr/bin/certbot renew
-     --pre-hook "/usr/bin/systemctl stop tttls1.3_https"
-     --post-hook "/usr/bin/systemctl start tttls1.3_https"
-     --max-log-backups 10
-     --preferred-chain "ISRG Root X1"'
+      --pre-hook "/usr/bin/systemctl stop tttls1.3_https"
+      --post-hook "/usr/bin/systemctl start tttls1.3_https"
+      --rsa-key-size 4096
+      --max-log-backups 10
+      --preferred-chain "ISRG Root X1"'
     cron_file: certbot_renew
     user: root
