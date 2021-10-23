@@ -50,7 +50,11 @@ settings = {
   chain_files: [CHAIN_FILE_PATH],
   key_file: KEY_FILE_PATH,
   alpn: ['http/1.1'],
-  process_ocsp_response: process_ocsp_response
+  process_ocsp_response: process_ocsp_response,
+  cipher_suites: [
+    TTTLS13::CipherSuite::TLS_CHACHA20_POLY1305_SHA256,
+    TTTLS13::CipherSuite::TLS_AES_256_GCM_SHA384
+  ]
 }
 
 q = Queue.new
