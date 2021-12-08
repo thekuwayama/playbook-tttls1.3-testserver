@@ -106,7 +106,7 @@
     - { name: logger, version: 1.4.3 }
     - { name: openssl, version: 2.2.0 }
     - { name: timeout, version: 0.1.1 }
-    - { name: tttls1.3, version: 0.2.15 }
+    - { name: tttls1.3, version: 0.2.16 }
     - { name: webrick, version: 1.7.0 }
 
 - name: Make directory
