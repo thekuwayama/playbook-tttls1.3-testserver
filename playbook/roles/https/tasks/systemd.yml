@@ -1,5 +1,5 @@
 - name: Make directory
-  file:
+  ansible.builtin.file:
     path: "{{ https_server_directory }}"
     state: directory
     recurse: true
@@ -8,7 +8,7 @@
     mode: 0755
 
 - name: Template server.rb
-  template:
+  ansible.builtin.template:
     src: server.rb.j2
     dest: "{{ https_server_directory }}/server.rb"
     owner: tttls1.3_https
@@ -16,7 +16,7 @@
     mode: 0644
 
 - name: Copy index.html
-  copy:
+  ansible.builtin.copy:
     src: index.html
     dest: "{{ https_server_directory }}/index.html"
     owner: tttls1.3_https
@@ -24,7 +24,7 @@
     mode: 0644
 
 - name: Template tttls1.3_https.service
-  template:
+  ansible.builtin.template:
     src: tttls1.3_https.service.j2
     dest: /etc/systemd/system/tttls1.3_https.service
     owner: root
@@ -32,8 +32,8 @@
     mode: 0600
 
 - name: Enable tttls1.3_https.service
-  systemd:
+  ansible.builtin.systemd:
     name: tttls1.3_https.service
     state: restarted
-    daemon_reload: yes
-    enabled: yes
+    daemon_reload: true
+    enabled: true

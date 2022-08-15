@@ -1,24 +1,24 @@
 - name: Disable password authentication ssh-login
-  replace:
+  ansible.builtin.replace:
     path: /etc/ssh/sshd_config
     regexp: '^#?PasswordAuthentication (yes|no)'
     replace: 'PasswordAuthentication no'
 
 - name: Disable root ssh-login
-  replace:
+  ansible.builtin.replace:
     path: /etc/ssh/sshd_config
     regexp: '^#?PermitRootLogin (yes|no)'
     replace: 'PermitRootLogin no'
 
 - name: Enable pubkey authentication ssh-login
-  replace:
+  ansible.builtin.replace:
     path: /etc/ssh/sshd_config
     regexp: '^#?PubkeyAuthentication (yes|no)'
     replace: 'PubkeyAuthentication yes'
 
 - name: Restart sshd
-  systemd:
+  ansible.builtin.systemd:
     name: sshd.service
     state: restarted
-    daemon_reload: yes
-    enabled: yes
+    daemon_reload: true
+    enabled: true
