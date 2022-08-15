@@ -1,6 +1,6 @@
-ansible
-ansible-lint
-jinja2
-paramiko
-pycodestyle
-setuptools
+ansible      == 6.*
+ansible-lint == 6.*
+jinja2       == 3.*
+paramiko     == 2.*
+pycodestyle  == 2.*
+setuptools   == 63.*
