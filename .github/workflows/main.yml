@@ -11,17 +11,16 @@ on:
 jobs:
   ci:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: ['3.x']
     steps:
       - name: Set up Python
         uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
       - uses: actions/checkout@v3
       - name: Install dependencies
         run: |
-          pip3 --version
-          pip3 install -r requirements.txt
+          pip --version
+          pip install -r requirements.txt
       - name: Run lint
         run: |
           ansible --version
