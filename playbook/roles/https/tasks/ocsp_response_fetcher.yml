@@ -1,12 +1,12 @@
 - name: Install crontabs
-  yum:
+  ansible.builtin.yum:
     name: crontabs
 
 - name: Install gems
   gem:
     name: "{{ item.name }}"
     version: "{{ item.version }}"
-    user_install: no
+    user_install: false
     executable: "{{ rbenv_directory }}/shims/gem"
   with_items:
     - { name: ocsprf, version: 0.0.2 }
@@ -14,13 +14,13 @@
 - name: Set OCSP Response fetcher
   block:
     - name: Initial fetch
-      command:
+      ansible.builtin.command:
         cmd: "{{ ocsp_response_fetcher_job }}"
         creates:
           - "{{ ocsp_response_fetcher_cache_file }}"
-      ignore_errors: True
+      ignore_errors: true
     - name: Set crontab
-      cron:
+      ansible.builtin.cron:
         name: 'ocsp_response_fetcher'
         weekday: '6'
         hour: '22'

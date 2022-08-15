@@ -1,5 +1,5 @@
 - name: Install "{{ packages }}"
-  yum:
+  ansible.builtin.yum:
     name: "{{ packages }}"
   vars:
     packages:
@@ -12,26 +12,26 @@
       - zlib-devel
 
 - name: Check whether openssl is installed
-  shell: bash -lc "openssl version | grep {{ openssl_version }}"
-  ignore_errors: True
+  ansible.builtin.shell: bash -lc "openssl version | grep {{ openssl_version }}"
+  ignore_errors: true
   register: openssl_version_check
 
 - name: Download openssl
-  get_url:
+  ansible.builtin.get_url:
     url: "https://www.openssl.org/source/openssl-{{ openssl_version }}.tar.gz"
     dest: "{{ openssl_directory_prefix }}/src/openssl-{{ openssl_version }}.tar.gz"
     checksum: "sha256:{{ openssl_file_sha256 }}"
   when: openssl_version_check.rc != 0
 
 - name: Unarchive openssl
-  unarchive:
+  ansible.builtin.unarchive:
     src: "{{ openssl_directory_prefix }}/src/openssl-{{ openssl_version }}.tar.gz"
     dest: "{{ openssl_directory_prefix }}/src"
-    remote_src: yes
+    remote_src: true
   when: openssl_version_check.rc != 0
 
 - name: Install openssl
-  shell: |
+  ansible.builtin.shell: |
     ./config --prefix={{ openssl_directory }} shared zlib
     make depend
     make
@@ -41,7 +41,7 @@
   when: openssl_version_check.rc != 0
 
 - name: Template openssl.sh
-  template:
+  ansible.builtin.template:
     src: openssl.sh.j2
     dest: /etc/profile.d/openssl.sh
     owner: root
@@ -49,7 +49,7 @@
     mode: 0755
 
 - name: Template openssl.conf
-  template:
+  ansible.builtin.template:
     src: openssl.conf.j2
     dest: /etc/ld.so.conf.d/openssl.conf
     owner: root
@@ -57,23 +57,23 @@
     mode: 0644
 
 - name: Configure openssl library path
-  command:
+  ansible.builtin.command:
     cmd: ldconfig
 
 - name: Download rbenv
-  git:
+  ansible.builtin.git:
     repo: https://github.com/sstephenson/rbenv.git
     version: "{{ rbenv_version }}"
     dest: "{{ rbenv_directory }}"
 
 - name: Download ruby-build
-  git:
+  ansible.builtin.git:
     repo: https://github.com/sstephenson/ruby-build.git
     version: "{{ ruby_build_version }}"
     dest: "{{ rbenv_directory }}/plugins/ruby-build"
 
 - name: Template rbenv.sh
-  template:
+  ansible.builtin.template:
     src: rbenv.sh.j2
     dest: /etc/profile.d/rbenv.sh
     owner: root
@@ -81,26 +81,27 @@
     mode: 0755
 
 - name: Check ruby version and openssl version installed with ruby
-  shell: bash -lc "ruby --version | grep {{ ruby_version }} && ruby -ropenssl -e'puts OpenSSL::OPENSSL_VERSION' | grep {{ openssl_version }}"
-  ignore_errors: True
+  ansible.builtin.shell: bash -lc "ruby --version | grep {{ ruby_version }} && ruby -ropenssl -e'puts OpenSSL::OPENSSL_VERSION' | grep {{ openssl_version }}"
+  ignore_errors: true
   register: ruby_openssl_version_check
 
 - name: Install ruby
-  command:
+  ansible.builtin.command:
     cmd: bash -lc "rbenv install --force {{ ruby_version }}"
   environment:
     CONFIGURE_OPTS: "--with-openssl-dir={{ openssl_directory }}"
   when: ruby_openssl_version_check.rc != 0
 
 - name: Globalize ruby
-  command: bash -lc "rbenv global {{ ruby_version }}"
+  ansible.builtin.command: bash -lc "rbenv global {{ ruby_version }}"
 
 - name: Install gems
   gem:
     name: "{{ item.name }}"
     version: "{{ item.version }}"
-    user_install: no
+    user_install: false
     executable: "{{ rbenv_directory }}/shims/gem"
+    norc: true
   with_items:
     - { name: http_parser.rb, version: 0.8.0 }
     - { name: logger, version: 1.5.1 }
@@ -110,7 +111,7 @@
     - { name: webrick, version: 1.7.0 }
 
 - name: Make directory
-  file:
+  ansible.builtin.file:
     path: "{{ openssl_directory }}/ssl"
     state: directory
     recurse: true
@@ -118,8 +119,8 @@
     mode: 0755
 
 - name: Install cacert.pem
-  get_url:
+  ansible.builtin.get_url:
     url: https://curl.se/ca/cacert.pem
     dest: "{{ openssl_directory }}/ssl/cert.pem"
-    force: yes
-    validate_certs: no
+    force: true
+    validate_certs: false

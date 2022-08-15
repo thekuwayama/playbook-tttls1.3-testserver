@@ -1,9 +1,9 @@
 - name: Install openssl
-  yum:
+  ansible.builtin.yum:
     name: openssl
 
 - name: Make directory
-  file:
+  ansible.builtin.file:
     path: "/etc/letsencrypt/live/{{ domain }}/"
     state: directory
     recurse: true
@@ -12,7 +12,7 @@
     mode: 0644
 
 - name: Copy private certificate
-  copy:
+  ansible.builtin.copy:
     src: "{{ item }}"
     dest: "/etc/letsencrypt/live/{{ domain }}/{{ item }}"
     owner: root

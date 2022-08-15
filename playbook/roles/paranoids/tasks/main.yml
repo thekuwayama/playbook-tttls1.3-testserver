@@ -1,5 +1,5 @@
 - name: Template sshrc
-  template:
+  ansible.builtin.template:
     src: sshrc.j2
     dest: /etc/ssh/sshrc
     owner: root
@@ -7,7 +7,7 @@
     mode: 0755
 
 - name: Install "{{ packages }}"
-  yum:
+  ansible.builtin.yum:
     name: "{{ packages }}"
   vars:
     packages:
@@ -15,7 +15,7 @@
       - crontabs
 
 - name: Make directory
-  file:
+  ansible.builtin.file:
     path: /opt/paranoids
     state: directory
     recurse: true
@@ -24,7 +24,7 @@
     mode: 0755
 
 - name: Template paranoids_ss.sh
-  template:
+  ansible.builtin.template:
     src: paranoids_ss.sh.j2
     dest: /opt/paranoids/paranoids_ss.sh
     owner: root
@@ -32,7 +32,7 @@
     mode: 0755
 
 - name: Set crontab to monitor dest-ports
-  cron:
+  ansible.builtin.cron:
     name: 'monitoring dest-ports'
     minute: '*/1'
     job: /bin/bash /opt/paranoids/paranoids_ss.sh

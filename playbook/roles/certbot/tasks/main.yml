@@ -1,19 +1,19 @@
 - name: Install certbot
-  yum:
+  ansible.builtin.yum:
     name: certbot
 
 - name: Check existence of a certificate
-  stat:
+  ansible.builtin.stat:
     path: "/etc/letsencrypt/live/{{ domain }}/fullchain.pem"
   register: fullchain
 
 - name: Check existence of a private-key
-  stat:
+  ansible.builtin.stat:
     path: "/etc/letsencrypt/live/{{ domain }}/privkey.pem"
   register: privkey
 
 - name: Issue a certificate with ACME
-  command:
+  ansible.builtin.command:
     cmd: bash -lc "certbot certonly
       --standalone
       --rsa-key-size 4096
@@ -27,7 +27,7 @@
   when: not (fullchain.stat.exists and privkey.stat.exists)
 
 - name: Renew a certificate
-  command:
+  ansible.builtin.command:
     cmd: bash -lc 'certbot renew
       --pre-hook "systemctl stop tttls1.3_https"
       --rsa-key-size 4096
@@ -36,7 +36,7 @@
   when: fullchain.stat.exists and privkey.stat.exists
 
 - name: Set crontab of certbot
-  cron:
+  ansible.builtin.cron:
     name: 'certbot renew'
     weekday: '0'
     hour: '2'
