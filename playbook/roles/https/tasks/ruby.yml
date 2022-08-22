@@ -68,7 +68,7 @@
 
 - name: Download ruby-build
   ansible.builtin.git:
-    repo: https://github.com/sstephenson/ruby-build.git
+    repo: https://github.com/rbenv/ruby-build.git
     version: "{{ ruby_build_version }}"
     dest: "{{ rbenv_directory }}/plugins/ruby-build"
 
@@ -107,7 +107,7 @@
     - { name: logger, version: 1.5.1 }
     - { name: openssl, version: 3.0.0 }
     - { name: timeout, version: 0.3.0 }
-    - { name: tttls1.3, version: 0.2.17 }
+    - { name: tttls1.3, version: 0.2.18 }
     - { name: webrick, version: 1.7.0 }
 
 - name: Make directory
