@@ -5,10 +5,15 @@
     packages:
       - git-core
       - gcc
+      - gcc-c++
       - make
       - readline-devel
+      - patch
+      - nkf
       - bzip2
       - perl-core
+      - libyaml-devel
+      - libffi-devel
       - zlib-devel
 
 - name: Check whether openssl is installed
@@ -89,7 +94,7 @@
   ansible.builtin.command:
     cmd: bash -lc "rbenv install --force {{ ruby_version }}"
   environment:
-    RUBY_CONFIGURE_OPTS: "--without-openssl"
+    RUBY_CONFIGURE_OPTS: "--with-openssl-dir={{ openssl_directory }}"
   when: ruby_openssl_version_check.rc != 0
 
 - name: Globalize ruby
