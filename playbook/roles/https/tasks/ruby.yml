@@ -89,14 +89,14 @@
   ansible.builtin.command:
     cmd: bash -lc "rbenv install --force {{ ruby_version }}"
   environment:
-    CONFIGURE_OPTS: "--with-openssl-dir={{ openssl_directory }}"
+    RUBY_CONFIGURE_OPTS: "--with-openssl-dir={{ openssl_directory }}"
   when: ruby_openssl_version_check.rc != 0
 
 - name: Globalize ruby
   ansible.builtin.command: bash -lc "rbenv global {{ ruby_version }}"
 
 - name: Install gems
-  gem:
+  community.general.gem:
     name: "{{ item.name }}"
     version: "{{ item.version }}"
     user_install: false
@@ -104,11 +104,11 @@
     norc: true
   with_items:
     - { name: http_parser.rb, version: 0.8.0 }
-    - { name: logger, version: 1.5.1 }
-    - { name: openssl, version: 3.0.0 }
-    - { name: timeout, version: 0.3.0 }
-    - { name: tttls1.3, version: 0.2.18 }
-    - { name: webrick, version: 1.7.0 }
+    - { name: logger, version: 1.5.3 }
+    - { name: openssl, version: 3.1.0 }
+    - { name: timeout, version: 0.3.1 }
+    - { name: tttls1.3, version: 0.2.19 }
+    - { name: webrick, version: 1.8.1 }
 
 - name: Make directory
   ansible.builtin.file:

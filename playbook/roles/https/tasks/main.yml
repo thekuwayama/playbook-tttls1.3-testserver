@@ -1,4 +1,8 @@
-- import_tasks: systemuser.yml
-- import_tasks: ruby.yml
-- import_tasks: ocsp_response_fetcher.yml
-- import_tasks: systemd.yml
+- name: Setup system user
+  ansible.builtin.import_tasks: systemuser.yml
+- name: Setup Ruby
+  ansible.builtin.import_tasks: ruby.yml
+- name: Setup OCSP Response fetcher
+  ansible.builtin.import_tasks: ocsp_response_fetcher.yml
+- name: Setup systemd
+  ansible.builtin.import_tasks: systemd.yml

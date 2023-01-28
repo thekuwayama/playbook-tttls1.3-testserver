@@ -3,7 +3,7 @@
     name: crontabs
 
 - name: Install gems
-  gem:
+  community.general.gem:
     name: "{{ item.name }}"
     version: "{{ item.version }}"
     user_install: false
