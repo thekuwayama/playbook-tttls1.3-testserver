@@ -89,7 +89,7 @@
   ansible.builtin.command:
     cmd: bash -lc "rbenv install --force {{ ruby_version }}"
   environment:
-    CONFIGURE_OPTS: "--with-openssl-dir={{ openssl_directory }}"
+    RUBY_CONFIGURE_OPTS: "--without-openssl"
   when: ruby_openssl_version_check.rc != 0
 
 - name: Globalize ruby
