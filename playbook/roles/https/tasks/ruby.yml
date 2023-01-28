@@ -5,15 +5,10 @@
     packages:
       - git-core
       - gcc
-      - gcc-c++
       - make
       - readline-devel
-      - patch
-      - nkf
       - bzip2
       - perl-core
-      - libyaml-devel
-      - libffi-devel
       - zlib-devel
 
 - name: Check whether openssl is installed

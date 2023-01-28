@@ -3,8 +3,8 @@ rbenv_version: v1.2.0
 ruby_build_version: v20220726
 ruby_version: 3.1.2
 https_server_directory: /opt/tttls1.3_https
-openssl_version: 3.0.7
-openssl_file_sha256: 83049d042a260e696f62406ac5c08bf706fd84383f945cf21bd61e9ed95c396e
+openssl_version: 1.1.1s
+openssl_file_sha256: c5ac01e760ee6ff0dab61d6b2bbd30146724d063eb322180c6f18a6f74e4b6aa
 openssl_directory_prefix: /usr/local/
 openssl_directory: "{{ openssl_directory_prefix }}/openssl-{{ openssl_version }}"
 ocsp_response_fetcher_cache_file: /tmp/ocsp_response.der
