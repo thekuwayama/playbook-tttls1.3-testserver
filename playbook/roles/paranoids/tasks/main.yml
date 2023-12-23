@@ -4,7 +4,7 @@
     dest: /etc/ssh/sshrc
     owner: root
     group: root
-    mode: 0755
+    mode: "0755"
 
 - name: Install "{{ packages }}"
   ansible.builtin.yum:
@@ -21,7 +21,7 @@
     recurse: true
     owner: root
     group: root
-    mode: 0755
+    mode: "0755"
 
 - name: Template paranoids_ss.sh
   ansible.builtin.template:
@@ -29,7 +29,7 @@
     dest: /opt/paranoids/paranoids_ss.sh
     owner: root
     group: root
-    mode: 0755
+    mode: "0755"
 
 - name: Set crontab to monitor dest-ports
   ansible.builtin.cron:

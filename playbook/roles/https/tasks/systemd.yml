@@ -5,7 +5,7 @@
     recurse: true
     owner: tttls1.3_https
     group: wheel
-    mode: 0755
+    mode: "0755"
 
 - name: Template server.rb
   ansible.builtin.template:
@@ -13,7 +13,7 @@
     dest: "{{ https_server_directory }}/server.rb"
     owner: tttls1.3_https
     group: wheel
-    mode: 0644
+    mode: "0644"
 
 - name: Copy index.html
   ansible.builtin.copy:
@@ -21,7 +21,7 @@
     dest: "{{ https_server_directory }}/index.html"
     owner: tttls1.3_https
     group: wheel
-    mode: 0644
+    mode: "0644"
 
 - name: Template tttls1.3_https.service
   ansible.builtin.template:
@@ -29,7 +29,7 @@
     dest: /etc/systemd/system/tttls1.3_https.service
     owner: root
     group: root
-    mode: 0600
+    mode: "0600"
 
 - name: Enable tttls1.3_https.service
   ansible.builtin.systemd:

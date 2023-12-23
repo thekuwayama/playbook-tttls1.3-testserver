@@ -35,7 +35,7 @@ cid = OpenSSL::OCSP::CertificateId.new(
   OpenSSL::X509::Certificate.new(File.read(CHAIN_FILE_PATH))
 )
 process_ocsp_response = lambda do
-  der = File.binread('{{ ocsp_response_fetcher_cache_file }}')
+  der = File.binread('{{ https_ocsp_response_fetcher_cache_file }}')
   ocsp_response = OpenSSL::OCSP::Response.new(der)
   status = ocsp_response.basic.find_response(cid)
   return nil if status.nil? || status.next_update < Time.now

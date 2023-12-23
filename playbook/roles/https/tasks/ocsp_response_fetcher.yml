@@ -7,18 +7,23 @@
     name: "{{ item.name }}"
     version: "{{ item.version }}"
     user_install: false
-    executable: "{{ rbenv_directory }}/shims/gem"
+    executable: "{{ https_rbenv_directory }}/shims/gem"
   with_items:
     - { name: ocsprf, version: 0.0.2 }
 
 - name: Set OCSP Response fetcher
+  vars:
+    ocsp_response_fetcher_job: "{{ https_rbenv_directory }}/shims/ocsprf
+     /etc/letsencrypt/live/{{ domain }}/cert.pem
+     --issuer /etc/letsencrypt/live/{{ domain }}/chain.pem
+     --verbose --output {{ https_ocsp_response_fetcher_cache_file }}"
   block:
     - name: Initial fetch
       ansible.builtin.command:
         cmd: "{{ ocsp_response_fetcher_job }}"
         creates:
-          - "{{ ocsp_response_fetcher_cache_file }}"
-      ignore_errors: true
+          - "{{ https_ocsp_response_fetcher_cache_file }}"
+      failed_when: false
     - name: Set crontab
       ansible.builtin.cron:
         name: 'ocsp_response_fetcher'
@@ -28,8 +33,3 @@
         job: "{{ ocsp_response_fetcher_job }}"
         cron_file: ocsp_response_fetcher
         user: root
-  vars:
-    ocsp_response_fetcher_job: "{{ rbenv_directory }}/shims/ocsprf
-     /etc/letsencrypt/live/{{ domain }}/cert.pem
-     --issuer /etc/letsencrypt/live/{{ domain }}/chain.pem
-     --verbose --output {{ ocsp_response_fetcher_cache_file }}"

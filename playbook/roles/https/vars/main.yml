@@ -1,12 +1,12 @@
-rbenv_directory:
+https_rbenv_directory:
   /opt/rbenv
-rbenv_version:
+https_rbenv_version:
   v1.2.0
-ruby_build_version:
+https_ruby_build_version:
   v20220726
-ruby_version:
+https_ruby_version:
   3.1.2
-gems:
+https_gems:
   - name:
       http_parser.rb
     version:
@@ -33,13 +33,13 @@ gems:
       1.8.1
 https_server_directory:
   /opt/tttls1.3_https
-openssl_version:
+https_openssl_version:
   1.1.1s
-openssl_file_sha256:
+https_openssl_file_sha256:
   c5ac01e760ee6ff0dab61d6b2bbd30146724d063eb322180c6f18a6f74e4b6aa
-openssl_directory_prefix:
+https_openssl_directory_prefix:
   /usr/local/
-openssl_directory:
-  "{{ openssl_directory_prefix }}/openssl-{{ openssl_version }}"
-ocsp_response_fetcher_cache_file:
+https_openssl_directory:
+  "{{ https_openssl_directory_prefix }}/openssl-{{ https_openssl_version }}"
+https_ocsp_response_fetcher_cache_file:
   /tmp/ocsp_response.der
