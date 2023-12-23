@@ -1,23 +1,5 @@
 [private_certificate]
-127.0.0.1
-
-[private_certificate:vars]
-ansible_port=2222
-ansible_user=ansible
-ansible_ssh_private_key_file=../id_rsa
+dev ansible_connection=docker ansible_python_interpreter=python
 
 [https]
-127.0.0.1
-
-[https:vars]
-ansible_port=2222
-ansible_user=ansible
-ansible_ssh_private_key_file=../id_rsa
-
-[paranoids]
-127.0.0.1
-
-[paranoids:vars]
-ansible_port=2222
-ansible_user=ansible
-ansible_ssh_private_key_file=../id_rsa
+dev ansible_connection=docker ansible_python_interpreter=python

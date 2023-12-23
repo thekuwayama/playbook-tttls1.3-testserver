@@ -17,15 +17,13 @@ $ pip install -r requirements.txt
 ### dev
 
 ```bash
-$ ssh-keygen -f ./id_rsa -t rsa -b 4096 -N ''
+$ docker image build --no-cache . -t playbook-tttls1.3-testserver/dev
 
-$ docker build . -t playbook-tttls1.3-testserver/dev
-
-$ docker run --privileged -d -p 2222:22 -p 4433:443 playbook-tttls1.3-testserver/dev /sbin/init
+$ docker run --privileged -d --name dev playbook-tttls1.3-testserver/dev /sbin/init
 
 $ cd playbook
 
-$ ansible-playbook --ask-vault-pass -i dev private_certificate.yml https.yml paranoids.yml
+$ ansible-playbook -i dev private_certificate.yml https.yml
 ```
 
 Check [https://localhost:4433](https://localhost:4433)
