@@ -19,7 +19,7 @@ $ pip install -r requirements.txt
 ```bash
 $ docker image build --no-cache . -t playbook-tttls1.3-testserver/dev
 
-$ docker run --privileged -d --name dev playbook-tttls1.3-testserver/dev /sbin/init
+$ docker run --privileged -d -p 4433:443 --name dev playbook-tttls1.3-testserver/dev /sbin/init
 
 $ cd playbook
 
