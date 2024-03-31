@@ -8,6 +8,7 @@
     version: "{{ item.version }}"
     user_install: false
     executable: "{{ https_rbenv_directory }}/shims/gem"
+    norc: true
   with_items:
     - { name: ocsprf, version: 0.0.2 }
 
