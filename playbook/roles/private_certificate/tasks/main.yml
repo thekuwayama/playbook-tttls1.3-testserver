@@ -1,5 +1,5 @@
 - name: Install openssl
-  ansible.builtin.yum:
+  ansible.builtin.apt:
     name: openssl
 
 - name: Make directory

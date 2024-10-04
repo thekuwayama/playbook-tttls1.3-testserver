@@ -1,15 +1,17 @@
 - name: Install "{{ packages }}"
-  ansible.builtin.yum:
+  ansible.builtin.apt:
     name: "{{ packages }}"
   vars:
     packages:
       - git-core
       - gcc
       - make
-      - readline-devel
+      - libreadline-dev
+      - libssl-dev
+      - libyaml-dev
       - bzip2
-      - perl-core
-      - zlib-devel
+      - zlib1g-dev
+      - curl
 
 - name: Check whether openssl is installed
   ansible.builtin.shell: bash -lc "openssl version | grep {{ https_openssl_version }}"

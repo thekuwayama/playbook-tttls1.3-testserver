@@ -30,6 +30,8 @@ Check [https://localhost:4433](https://localhost:4433)
 
 ```bash
 $ docker ps -ql | xargs docker stop
+
+$ docker container prune
 ```
 
 

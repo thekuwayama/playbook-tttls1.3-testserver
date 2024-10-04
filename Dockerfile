@@ -1,6 +1,6 @@
-FROM centos:centos7
+FROM ubuntu:24.10
 
-RUN yum -y update; yum clean all
-RUN yum -y install sudo
+RUN apt-get update -y
+RUN apt-get install -y sudo init systemd
 
 EXPOSE 443

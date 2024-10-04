@@ -1,7 +1,7 @@
 - name: Add system user
   ansible.builtin.user:
     name: tttls1.3_https
-    group: wheel
+    group: sudo
     uid: 10443
     system: true
     shell: /sbin/nologin

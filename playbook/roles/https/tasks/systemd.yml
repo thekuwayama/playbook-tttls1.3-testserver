@@ -4,7 +4,7 @@
     state: directory
     recurse: true
     owner: tttls1.3_https
-    group: wheel
+    group: sudo
     mode: "0755"
 
 - name: Template server.rb
@@ -12,7 +12,7 @@
     src: server.rb.j2
     dest: "{{ https_server_directory }}/server.rb"
     owner: tttls1.3_https
-    group: wheel
+    group: sudo
     mode: "0644"
 
 - name: Copy index.html
@@ -20,7 +20,7 @@
     src: index.html
     dest: "{{ https_server_directory }}/index.html"
     owner: tttls1.3_https
-    group: wheel
+    group: sudo
     mode: "0644"
 
 - name: Template tttls1.3_https.service
