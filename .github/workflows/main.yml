@@ -12,6 +12,8 @@ jobs:
   ci:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v3
+
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
@@ -25,8 +27,6 @@ jobs:
           uv venv
           uv python install
           uv pip sync requirements.txt
-
-      - uses: actions/checkout@v3
 
       - name: Run lint
         run: |
