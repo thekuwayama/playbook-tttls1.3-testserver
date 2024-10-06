@@ -6,9 +6,13 @@
 ## Set up python
 
 ```bash
-$ source /path/to/virtualenv/bin/activate
+$ uv venv
 
-$ pip install -r requirements.txt
+$ source .venv/bin/activate
+
+$ uv python install
+
+$ uv pip sync requirements.txt
 ```
 
 
