@@ -26,7 +26,7 @@ jobs:
         run: |
           uv venv
           uv python install
-          uv pip sync requirements.txt
+          uv pip install -r requirements.txt
 
       - name: Run lint
         run: |
