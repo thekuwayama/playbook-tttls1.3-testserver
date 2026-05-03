@@ -101,14 +101,12 @@
   ansible.builtin.command: bash -lc "rbenv global {{ https_ruby_version }}"
 
 - name: Install gems
-  community.general.gem:
-    name: "{{ item.name }}"
-    version: "{{ item.version }}"
-    user_install: false
-    executable: "{{ https_rbenv_directory }}/shims/gem"
-    norc: true
+  ansible.builtin.shell:
+    bash -lc "{{ https_rbenv_directory }}/shims/gem list --installed --version {{ item.version }} {{ item.name }} ||
+    {{ https_rbenv_directory }}/shims/gem install --norc --version {{ item.version }} --no-user-install --no-document {{ item.name }}"
   with_items:
     - "{{ https_gems }}"
+  changed_when: false
 
 - name: Make directory
   ansible.builtin.file:
