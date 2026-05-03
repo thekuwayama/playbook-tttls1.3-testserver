@@ -25,14 +25,14 @@
     dest: "{{ https_openssl_directory_prefix }}/src/openssl-{{ https_openssl_version }}.tar.gz"
     checksum: "sha256:{{ https_openssl_file_sha256 }}"
     mode: "0644"
-  when: openssl_version_check.rc != 0
+  when: openssl_version_check.rc | default(1) != 0
 
 - name: Unarchive openssl
   ansible.builtin.unarchive:
     src: "{{ https_openssl_directory_prefix }}/src/openssl-{{ https_openssl_version }}.tar.gz"
     dest: "{{ https_openssl_directory_prefix }}/src"
     remote_src: true
-  when: openssl_version_check.rc != 0
+  when: openssl_version_check.rc | default(1) != 0
 
 - name: Install openssl
   ansible.builtin.shell: |
@@ -42,7 +42,7 @@
     make install
   args:
     chdir: "{{ https_openssl_directory_prefix }}/src/openssl-{{ https_openssl_version }}"
-  when: openssl_version_check.rc != 0
+  when: openssl_version_check.rc | default(1) != 0
 
 - name: Template openssl.sh
   ansible.builtin.template:
@@ -95,20 +95,18 @@
     cmd: bash -lc "rbenv install --force {{ https_ruby_version }}"
   environment:
     RUBY_CONFIGURE_OPTS: "--with-openssl-dir={{ https_openssl_directory }}"
-  when: ruby_openssl_version_check.rc != 0
+  when: ruby_openssl_version_check.rc | default(1) != 0
 
 - name: Globalize ruby
   ansible.builtin.command: bash -lc "rbenv global {{ https_ruby_version }}"
 
 - name: Install gems
-  community.general.gem:
-    name: "{{ item.name }}"
-    version: "{{ item.version }}"
-    user_install: false
-    executable: "{{ https_rbenv_directory }}/shims/gem"
-    norc: true
+  ansible.builtin.shell:
+    bash -lc "{{ https_rbenv_directory }}/shims/gem list --installed --version {{ item.version }} {{ item.name }} ||
+    {{ https_rbenv_directory }}/shims/gem install --norc --version {{ item.version }} --no-user-install --no-document {{ item.name }}"
   with_items:
     - "{{ https_gems }}"
+  changed_when: false
 
 - name: Make directory
   ansible.builtin.file:

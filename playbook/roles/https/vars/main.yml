@@ -3,34 +3,30 @@ https_rbenv_directory:
 https_rbenv_version:
   v1.3.0
 https_ruby_build_version:
-  v20240917
+  v20260501
 https_ruby_version:
-  3.1.6
+  4.0.1
 https_gems:
   - name:
       http_parser.rb
     version:
-      0.8.0
+      0.8.1
   - name:
       logger
     version:
-      1.6.1
-  - name:
-      openssl
-    version:
-      3.2.0
+      1.7.0
   - name:
       timeout
     version:
-      0.4.1
+      0.6.1
   - name:
       tttls1.3
     version:
-      0.3.3
+      0.3.7
   - name:
       webrick
     version:
-      1.8.2
+      1.9.2
 https_server_directory:
   /opt/tttls1.3_https
 https_openssl_version:

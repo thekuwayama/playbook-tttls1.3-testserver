@@ -1,3 +1,6 @@
+[all:vars]
+ansible_pipelining=true
+
 [certbot]
 160.16.64.99 ansible_python_interpreter=/usr/bin/python3
 
