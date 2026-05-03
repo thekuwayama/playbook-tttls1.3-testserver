@@ -20,7 +20,7 @@
 
 - name: Download openssl
   ansible.builtin.get_url:
-    url: "https://www.openssl.org/source/openssl-{{ https_openssl_version }}.tar.gz"
+    url: "https://github.com/openssl/openssl/releases/download/openssl-{{ https_openssl_version }}/openssl-{{ https_openssl_version }}.tar.gz"
     dest: "{{ https_openssl_directory_prefix }}/src/openssl-{{ https_openssl_version }}.tar.gz"
     checksum: "sha256:{{ https_openssl_file_sha256 }}"
     mode: "0644"
