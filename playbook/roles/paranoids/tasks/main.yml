@@ -11,7 +11,7 @@
     name: "{{ packages }}"
   vars:
     packages:
-      - iproute
+      - iproute2
       - cron
 
 - name: Make directory
