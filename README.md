@@ -39,14 +39,16 @@ $ docker container prune
 
 ### prod
 
- ```bash
-$ uv run python gen_startup.py --user $USER --id_rsa_pub="`cat ~/.ssh/id_rsa.pub`" | pbcopy
-```
-
-Paste startup-script to settings.
+Login via SSH on first boot and run:
 
 ```bash
-$ uv run ansible-playbook --ask-vault-pass -i playbook/prod --user $USER playbook/certbot.yml playbook/https.yml playbook/sshd_config.yml playbook/paranoids.yml
+$ ssh ubuntu@<server_ip>
+
+$ echo "ubuntu ALL=(ALL) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/ubuntu
+```
+
+```bash
+$ uv run ansible-playbook --ask-vault-pass -i playbook/prod --user ubuntu playbook/certbot.yml playbook/https.yml playbook/sshd_config.yml playbook/paranoids.yml
 ```
 
 Check [https://thekuwayama.net](https://thekuwayama.net)
