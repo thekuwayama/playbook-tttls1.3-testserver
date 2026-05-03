@@ -5,7 +5,7 @@ https_rbenv_version:
 https_ruby_build_version:
   v20240917
 https_ruby_version:
-  3.1.6
+  4.0.1
 https_gems:
   - name:
       http_parser.rb
@@ -26,7 +26,7 @@ https_gems:
   - name:
       tttls1.3
     version:
-      0.3.3
+      0.3.7
   - name:
       webrick
     version:
