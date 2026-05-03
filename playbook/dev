@@ -1,5 +1,5 @@
 [private_certificate]
-dev ansible_connection=docker ansible_python_interpreter=python
+dev ansible_connection=docker ansible_python_interpreter=/usr/bin/python3
 
 [https]
-dev ansible_connection=docker ansible_python_interpreter=python
+dev ansible_connection=docker ansible_python_interpreter=/usr/bin/python3
