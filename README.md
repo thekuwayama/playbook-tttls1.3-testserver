@@ -12,7 +12,7 @@ $ source .venv/bin/activate
 
 $ uv python install
 
-$ uv pip sync requirements.txt
+$ uv pip install -r requirements.txt
 ```
 
 
@@ -25,9 +25,7 @@ $ docker image build --no-cache . -t playbook-tttls1.3-testserver/dev
 
 $ docker run --privileged -d -p 4433:443 --name dev playbook-tttls1.3-testserver/dev /sbin/init
 
-$ cd playbook
-
-$ ansible-playbook -i dev private_certificate.yml https.yml
+$ uv run ansible-playbook -i playbook/dev playbook/private_certificate.yml playbook/https.yml
 ```
 
 Check [https://localhost:4433](https://localhost:4433)
@@ -42,15 +40,13 @@ $ docker container prune
 ### prod
 
  ```bash
-$ python gen_startup.py --user $USER --id_rsa_pub="`cat ~/.ssh/id_rsa.pub`" | pbcopy
+$ uv run python gen_startup.py --user $USER --id_rsa_pub="`cat ~/.ssh/id_rsa.pub`" | pbcopy
 ```
 
 Paste startup-script to settings.
 
 ```bash
-$ cd playbook
-
-$ ansible-playbook --ask-vault-pass -i prod --user $USER certbot.yml https.yml sshd_config.yml paranoids.yml
+$ uv run ansible-playbook --ask-vault-pass -i playbook/prod --user $USER playbook/certbot.yml playbook/https.yml playbook/sshd_config.yml playbook/paranoids.yml
 ```
 
 Check [https://thekuwayama.net](https://thekuwayama.net)
