@@ -42,7 +42,7 @@ $ docker container prune
 Login via SSH on first boot and run:
 
 ```bash
-$ ssh ubuntu@<server_ip>
+$ ssh ubuntu@160.16.64.99
 
 $ echo "ubuntu ALL=(ALL) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/ubuntu
 ```
