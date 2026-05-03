@@ -3,7 +3,7 @@ https_rbenv_directory:
 https_rbenv_version:
   v1.3.0
 https_ruby_build_version:
-  v20240917
+  v20260501
 https_ruby_version:
   4.0.1
 https_gems:
