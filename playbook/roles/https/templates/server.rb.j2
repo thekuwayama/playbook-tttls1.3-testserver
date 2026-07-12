@@ -1,6 +1,7 @@
 # encoding: ascii-8bit
 # frozen_string_literal: true
 
+require 'erb'
 require 'etc'
 require 'http/parser'
 require 'logger'
@@ -15,6 +16,37 @@ CHAIN_FILE_PATH = '/etc/letsencrypt/live/{{ domain }}/chain.pem'
 KEY_FILE_PATH = '/etc/letsencrypt/live/{{ domain }}/privkey.pem'
 INDEX_FILE_PATH = '{{ https_server_directory }}/index.html'
 
+CIPHER_SUITE_NAMES = {
+  TTTLS13::CipherSuite::TLS_AES_128_GCM_SHA256       => 'TLS_AES_128_GCM_SHA256',
+  TTTLS13::CipherSuite::TLS_AES_256_GCM_SHA384       => 'TLS_AES_256_GCM_SHA384',
+  TTTLS13::CipherSuite::TLS_CHACHA20_POLY1305_SHA256 => 'TLS_CHACHA20_POLY1305_SHA256',
+  TTTLS13::CipherSuite::TLS_AES_128_CCM_SHA256       => 'TLS_AES_128_CCM_SHA256',
+  TTTLS13::CipherSuite::TLS_AES_128_CCM_8_SHA256     => 'TLS_AES_128_CCM_8_SHA256'
+}.freeze
+
+NAMED_GROUP_NAMES = {
+  TTTLS13::NamedGroup::SECP256R1 => 'secp256r1',
+  TTTLS13::NamedGroup::SECP384R1 => 'secp384r1',
+  TTTLS13::NamedGroup::SECP521R1 => 'secp521r1',
+  TTTLS13::NamedGroup::X25519    => 'x25519',
+  TTTLS13::NamedGroup::X448      => 'x448'
+}.freeze
+
+SIGNATURE_SCHEME_NAMES = {
+  TTTLS13::SignatureScheme::RSA_PKCS1_SHA256       => 'rsa_pkcs1_sha256',
+  TTTLS13::SignatureScheme::RSA_PKCS1_SHA384       => 'rsa_pkcs1_sha384',
+  TTTLS13::SignatureScheme::RSA_PKCS1_SHA512       => 'rsa_pkcs1_sha512',
+  TTTLS13::SignatureScheme::ECDSA_SECP256R1_SHA256 => 'ecdsa_secp256r1_sha256',
+  TTTLS13::SignatureScheme::ECDSA_SECP384R1_SHA384 => 'ecdsa_secp384r1_sha384',
+  TTTLS13::SignatureScheme::ECDSA_SECP521R1_SHA512 => 'ecdsa_secp521r1_sha512',
+  TTTLS13::SignatureScheme::RSA_PSS_RSAE_SHA256    => 'rsa_pss_rsae_sha256',
+  TTTLS13::SignatureScheme::RSA_PSS_RSAE_SHA384    => 'rsa_pss_rsae_sha384',
+  TTTLS13::SignatureScheme::RSA_PSS_RSAE_SHA512    => 'rsa_pss_rsae_sha512',
+  TTTLS13::SignatureScheme::RSA_PSS_PSS_SHA256     => 'rsa_pss_pss_sha256',
+  TTTLS13::SignatureScheme::RSA_PSS_PSS_SHA384     => 'rsa_pss_pss_sha384',
+  TTTLS13::SignatureScheme::RSA_PSS_PSS_SHA512     => 'rsa_pss_pss_sha512'
+}.freeze
+
 def simple_http_response(body)
   h = <<~HEADER_EOS
     HTTP/1.1 200 OK
@@ -27,8 +59,8 @@ def simple_http_response(body)
 
   h.gsub(WEBrick::LF, WEBrick::CRLF) + WEBrick::CRLF + body
 end
-http_response_body = File.read(INDEX_FILE_PATH)
-http_response = simple_http_response(http_response_body)
+
+http_template = ERB.new(File.read(INDEX_FILE_PATH))
 
 settings = {
   crt_file: CRT_FILE_PATH,
@@ -56,18 +88,27 @@ Etc.nprocessors.times do
         server = TTTLS13::Server.new(s, **settings)
         parser = HTTP::Parser.new
 
-        parser.on_message_complete = proc do
-          if !parser.http_method.nil?
-            logger.info 'Receive Request'
-            server.write(http_response)
-            server.close
-          else
-            logger.warn 'Not Request'
-          end
-        end
-
         begin
           server.accept
+
+          tls_info = {
+            cipher_suite:     CIPHER_SUITE_NAMES[server.negotiated_cipher_suite]         || 'unknown',
+            named_group:      NAMED_GROUP_NAMES[server.negotiated_named_group]           || 'unknown',
+            signature_scheme: SIGNATURE_SCHEME_NAMES[server.negotiated_signature_scheme] || 'unknown',
+            alpn:             server.negotiated_alpn || 'none'
+          }
+          http_response = simple_http_response(http_template.result_with_hash(tls_info))
+
+          parser.on_message_complete = proc do
+            if !parser.http_method.nil?
+              logger.info 'Receive Request'
+              server.write(http_response)
+              server.close
+            else
+              logger.warn 'Not Request'
+            end
+          end
+
           parser << server.read until server.eof?
           server.close
         rescue StandardError => e

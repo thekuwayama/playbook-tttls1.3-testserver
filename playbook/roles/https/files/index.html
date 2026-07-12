@@ -5,7 +5,25 @@
     <title>tttls1.3 test server</title>
   </head>
   <body>
-    <p>TLS1.3  Test Server</p>
+    <h1>TLS 1.3 Test Server</h1>
+    <table border="1">
+      <tr>
+        <th>Cipher Suite</th>
+        <td><%= cipher_suite %></td>
+      </tr>
+      <tr>
+        <th>Key Exchange</th>
+        <td><%= named_group %></td>
+      </tr>
+      <tr>
+        <th>Signature Scheme</th>
+        <td><%= signature_scheme %></td>
+      </tr>
+      <tr>
+        <th>ALPN</th>
+        <td><%= alpn %></td>
+      </tr>
+    </table>
     <footer>
       <p>
         &copy; 2019 thekuwayama.
