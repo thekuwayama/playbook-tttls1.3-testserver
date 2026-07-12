@@ -16,23 +16,23 @@
   ansible.builtin.command:
     cmd: bash -lc "certbot certonly
       --standalone
-      --rsa-key-size 4096
+      --key-type ecdsa
+      --elliptic-curve secp256r1
       --domain {{ domain }}
       --domain www.{{ domain }}
       --email {{ certbot_email }}
       --agree-tos
       --no-eff-email
-      --pre-hook 'systemctl stop tttls1.3_https || true'
-      --preferred-chain 'ISRG Root X1'"
+      --pre-hook 'systemctl stop tttls1.3_https || true'"
   when: not (fullchain.stat.exists and privkey.stat.exists)
 
 - name: Renew a certificate
   ansible.builtin.command:
     cmd: bash -lc 'certbot renew
       --pre-hook "systemctl stop tttls1.3_https || true"
-      --rsa-key-size 4096
-      --max-log-backups 10
-      --preferred-chain "ISRG Root X1"'
+      --key-type ecdsa
+      --elliptic-curve secp256r1
+      --max-log-backups 10'
   when: fullchain.stat.exists and privkey.stat.exists
 
 - name: Set crontab of certbot
@@ -44,8 +44,8 @@
     job: '/usr/bin/certbot renew
       --pre-hook "/usr/bin/systemctl stop tttls1.3_https"
       --post-hook "/usr/bin/systemctl start tttls1.3_https"
-      --rsa-key-size 4096
-      --max-log-backups 10
-      --preferred-chain "ISRG Root X1"'
+      --key-type ecdsa
+      --elliptic-curve secp256r1
+      --max-log-backups 10'
     cron_file: certbot_renew
     user: root
