@@ -35,6 +35,7 @@
       --standalone
       --key-type ecdsa
       --elliptic-curve secp256r1
+      --preferred-profile shortlived
       --domain {{ domain }}
       --domain www.{{ domain }}
       --email {{ certbot_email }}
@@ -49,13 +50,17 @@
       --pre-hook "systemctl stop tttls1.3_https || true"
       --key-type ecdsa
       --elliptic-curve secp256r1
+      --preferred-profile shortlived
       --max-log-backups 10'
   when: fullchain.stat.exists and privkey.stat.exists
 
+# certbot renews at 1/3 or 1/2 of remaining lifetime for certs shorter than 10 days,
+# so a 3-day interval keeps renewals well within that window for the ~6-day "shortlived" profile:
+# https://www.eff.org/deeplinks/2025/04/certbot-40-long-live-short-lived-certs
 - name: Set crontab of certbot
   ansible.builtin.cron:
     name: 'certbot renew'
-    weekday: '0'
+    day: '*/3'
     hour: '2'
     minute: '0'
     job: '/usr/bin/certbot renew
@@ -63,6 +68,7 @@
       --post-hook "/usr/bin/systemctl start tttls1.3_https"
       --key-type ecdsa
       --elliptic-curve secp256r1
+      --preferred-profile shortlived
       --max-log-backups 10'
     cron_file: certbot_renew
     user: root
