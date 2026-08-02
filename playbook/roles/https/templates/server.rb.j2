@@ -47,6 +47,8 @@ SIGNATURE_SCHEME_NAMES = {
   TTTLS13::SignatureScheme::RSA_PSS_PSS_SHA512     => 'rsa_pss_pss_sha512'
 }.freeze
 
+# NOTE: Content-Security-Policy: default-src 'none' により、ブラウザが暗黙的に発行する favicon.ico へのリクエストもブロックします。
+# ただ、このサーバーはどのパスでも同じ index.html を返すだけで、本物の favicon を返さないため許容です。
 def simple_http_response(body)
   h = <<~HEADER_EOS
     HTTP/1.1 200 OK
