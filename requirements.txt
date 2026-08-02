@@ -1,4 +1,3 @@
 ansible      == 10.*
 ansible-lint == 24.*
 jinja2       == 3.*
-paramiko     == 3.*
