@@ -1,6 +1,23 @@
-- name: Install certbot
+- name: Install snapd
   ansible.builtin.apt:
+    name: snapd
+
+- name: Install core snap
+  community.general.snap:
+    name: core
+    state: present
+
+- name: Install certbot snap
+  community.general.snap:
     name: certbot
+    classic: true
+    state: present
+
+- name: Symlink certbot snap into PATH
+  ansible.builtin.file:
+    src: /snap/bin/certbot
+    dest: /usr/bin/certbot
+    state: link
 
 - name: Check existence of a certificate
   ansible.builtin.stat:
