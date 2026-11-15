@@ -7,10 +7,10 @@
     group: biryani
     mode: "0755"
 
-- name: Template tiles.rb
+- name: Template server.rb
   ansible.builtin.template:
-    src: tiles.rb.j2
-    dest: "{{ biryani_server_directory }}/tiles.rb"
+    src: server.rb.j2
+    dest: "{{ biryani_server_directory }}/server.rb"
     owner: biryani
     group: biryani
     mode: "0644"

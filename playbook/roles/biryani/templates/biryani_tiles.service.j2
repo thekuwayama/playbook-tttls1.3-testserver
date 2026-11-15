@@ -3,7 +3,7 @@ Description=biryani tiles server daemon
 After=network.target
 
 [Service]
-ExecStart={{ biryani_rbenv_directory }}/shims/ruby {{ biryani_server_directory }}/tiles.rb {{ biryani_tiles_port }}
+ExecStart={{ biryani_rbenv_directory }}/shims/ruby {{ biryani_server_directory }}/server.rb {{ biryani_tiles_port }}
 WorkingDirectory={{ biryani_server_directory }}
 Restart=always
 Type=simple
