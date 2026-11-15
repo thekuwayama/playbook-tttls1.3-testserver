@@ -3,9 +3,9 @@ https_rbenv_directory:
 https_rbenv_version:
   v1.3.0
 https_ruby_build_version:
-  v20260501
+  v20261023
 https_ruby_version:
-  4.0.1
+  4.0.9
 https_gems:
   - name:
       http_parser.rb
@@ -30,9 +30,9 @@ https_gems:
 https_server_directory:
   /opt/tttls1.3_https
 https_openssl_version:
-  3.3.2
+  4.0.3
 https_openssl_file_sha256:
-  2e8a40b01979afe8be0bbfb3de5dc1c6709fedb46d6c89c10da114ab5fc3d281
+  325b5c806167c13b40b1ffeadfe0248197c00eccc4cf123ec1e28d2d2fd216d9
 https_openssl_directory_prefix:
   /usr/local
 https_openssl_directory:
