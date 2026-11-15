@@ -22,3 +22,11 @@
     - cert.pem
     - chain.pem
     - privkey.pem
+
+- name: Make fullchain.pem
+  ansible.builtin.copy:
+    content: "{{ lookup('ansible.builtin.file', 'cert.pem') }}\n{{ lookup('ansible.builtin.file', 'chain.pem') }}\n"
+    dest: "/etc/letsencrypt/live/{{ domain }}/fullchain.pem"
+    owner: root
+    group: root
+    mode: "0644"

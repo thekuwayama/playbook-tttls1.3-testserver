@@ -48,6 +48,7 @@
   ansible.builtin.command:
     cmd: bash -lc 'certbot renew
       --pre-hook "systemctl stop tttls1.3_https || true"
+      --deploy-hook "systemctl try-reload-or-restart biryani_tiles_nginx || true"
       --key-type ecdsa
       --elliptic-curve secp256r1
       --preferred-profile shortlived
@@ -66,6 +67,7 @@
     job: '/usr/bin/certbot renew
       --pre-hook "/usr/bin/systemctl stop tttls1.3_https"
       --post-hook "/usr/bin/systemctl start tttls1.3_https"
+      --deploy-hook "/usr/bin/systemctl try-reload-or-restart biryani_tiles_nginx"
       --key-type ecdsa
       --elliptic-curve secp256r1
       --preferred-profile shortlived

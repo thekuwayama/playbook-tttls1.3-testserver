@@ -1,0 +1,5 @@
+- name: biryani test server
+  hosts: biryani
+  become: true
+  roles:
+    - biryani

@@ -1,0 +1,53 @@
+- name: Make directory
+  ansible.builtin.file:
+    path: "{{ biryani_server_directory }}"
+    state: directory
+    recurse: true
+    owner: biryani
+    group: biryani
+    mode: "0755"
+
+- name: Template tiles.rb
+  ansible.builtin.template:
+    src: tiles.rb.j2
+    dest: "{{ biryani_server_directory }}/tiles.rb"
+    owner: biryani
+    group: biryani
+    mode: "0644"
+
+- name: Copy index.html
+  ansible.builtin.copy:
+    src: index.html
+    dest: "{{ biryani_server_directory }}/index.html"
+    owner: biryani
+    group: biryani
+    mode: "0644"
+
+- name: Template nginx.conf
+  ansible.builtin.template:
+    src: nginx.conf.j2
+    dest: "{{ biryani_server_directory }}/nginx.conf"
+    owner: biryani
+    group: biryani
+    mode: "0644"
+
+- name: Template systemd units
+  ansible.builtin.template:
+    src: "{{ item }}.j2"
+    dest: "/etc/systemd/system/{{ item }}"
+    owner: root
+    group: root
+    mode: "0600"
+  with_items:
+    - biryani_tiles.service
+    - biryani_tiles_nginx.service
+
+- name: Enable systemd units
+  ansible.builtin.systemd:
+    name: "{{ item }}"
+    state: restarted
+    daemon_reload: true
+    enabled: true
+  with_items:
+    - biryani_tiles.service
+    - biryani_tiles_nginx.service

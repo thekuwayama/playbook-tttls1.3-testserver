@@ -1,0 +1,21 @@
+[Unit]
+Description=nginx TLS termination proxy for biryani tiles server
+After=network.target biryani_tiles.service
+Wants=biryani_tiles.service
+
+[Service]
+ExecStartPre=/usr/sbin/nginx -t -q -e stderr -c {{ biryani_server_directory }}/nginx.conf
+ExecStart=/usr/sbin/nginx -e stderr -c {{ biryani_server_directory }}/nginx.conf -g 'daemon off;'
+ExecReload=/bin/kill -s HUP $MAINPID
+KillSignal=SIGQUIT
+WorkingDirectory={{ biryani_server_directory }}
+RuntimeDirectory=biryani_tiles_nginx
+Restart=always
+Type=simple
+
+User=biryani
+Group=biryani
+AmbientCapabilities=CAP_DAC_READ_SEARCH
+
+[Install]
+WantedBy=multi-user.target

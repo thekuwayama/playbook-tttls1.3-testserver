@@ -7,6 +7,9 @@ ansible_pipelining=true
 [https]
 160.16.64.99 ansible_python_interpreter=/usr/bin/python3
 
+[biryani]
+160.16.64.99 ansible_python_interpreter=/usr/bin/python3
+
 [sshd_config]
 160.16.64.99 ansible_python_interpreter=/usr/bin/python3
 
