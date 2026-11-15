@@ -1,0 +1,5 @@
+- name: security update
+  hosts: security_update
+  become: true
+  roles:
+    - security_update

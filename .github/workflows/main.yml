@@ -33,5 +33,5 @@ jobs:
           uv run ansible --version
           uv run ansible-lint --version
           uv run ansible-playbook -i playbook/dev playbook/{private_certificate,https,biryani}.yml --syntax-check
-          uv run ansible-playbook -i playbook/prod playbook/{certbot,https,biryani,sshd_config}.yml --syntax-check
+          uv run ansible-playbook -i playbook/prod playbook/{certbot,https,biryani,sshd_config,security_update}.yml --syntax-check
           find playbook/roles -type f -name '*.yml' | grep -v playbook/roles/paranoids/vars/main.yml | xargs -L1 -I{} uv run ansible-lint {}
