@@ -15,3 +15,6 @@ ansible_pipelining=true
 
 [paranoids]
 160.16.64.99 ansible_python_interpreter=/usr/bin/python3
+
+[security_update]
+160.16.64.99 ansible_python_interpreter=/usr/bin/python3

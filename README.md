@@ -51,4 +51,10 @@ $ echo "ubuntu ALL=(ALL) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/ubuntu
 $ uv run ansible-playbook --ask-vault-pass -i playbook/prod --user ubuntu playbook/certbot.yml playbook/https.yml playbook/biryani.yml playbook/sshd_config.yml playbook/paranoids.yml
 ```
 
+Apply security updates (reboots if required):
+
+```bash
+$ uv run ansible-playbook -i playbook/prod --user ubuntu playbook/security_update.yml
+```
+
 Check [https://thekuwayama.net](https://thekuwayama.net) and [https://thekuwayama.net:1443](https://thekuwayama.net:1443)
