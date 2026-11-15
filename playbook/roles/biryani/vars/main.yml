@@ -6,8 +6,8 @@ biryani_gems:
     version:
       0.0.16
 biryani_server_directory:
-  /opt/biryani_tiles
-biryani_tiles_port:
+  /opt/biryani_https
+biryani_server_port:
   8888
 biryani_tls_port:
   1443

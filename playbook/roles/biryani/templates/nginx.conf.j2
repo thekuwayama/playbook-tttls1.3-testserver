@@ -1,6 +1,6 @@
 load_module /usr/lib/nginx/modules/ngx_stream_module.so;
 
-pid /run/biryani_tiles_nginx/nginx.pid;
+pid /run/biryani_https_nginx/nginx.pid;
 error_log stderr;
 
 events {}
@@ -12,6 +12,6 @@ stream {
     ssl_certificate_key /etc/letsencrypt/live/{{ domain }}/privkey.pem;
     ssl_protocols       TLSv1.2 TLSv1.3;
     ssl_alpn            h2;
-    proxy_pass          127.0.0.1:{{ biryani_tiles_port }};
+    proxy_pass          127.0.0.1:{{ biryani_server_port }};
   }
 }

@@ -39,8 +39,8 @@
     group: root
     mode: "0600"
   with_items:
-    - biryani_tiles.service
-    - biryani_tiles_nginx.service
+    - biryani_https.service
+    - biryani_https_nginx.service
 
 - name: Enable systemd units
   ansible.builtin.systemd:
@@ -49,5 +49,5 @@
     daemon_reload: true
     enabled: true
   with_items:
-    - biryani_tiles.service
-    - biryani_tiles_nginx.service
+    - biryani_https.service
+    - biryani_https_nginx.service

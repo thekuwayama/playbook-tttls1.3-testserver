@@ -36,7 +36,7 @@ module App
   end
 end
 
-port = ARGV[0] || {{ biryani_tiles_port }}
+port = ARGV[0] || {{ biryani_server_port }}
 socket = TCPServer.new('127.0.0.1', port)
 server = Biryani::Server.new(
   # @param req [Biryani::HTTP::Request]
