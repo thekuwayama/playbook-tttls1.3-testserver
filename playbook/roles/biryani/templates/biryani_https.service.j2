@@ -1,0 +1,15 @@
+[Unit]
+Description=biryani https server daemon
+After=network.target
+
+[Service]
+ExecStart={{ biryani_rbenv_directory }}/shims/ruby {{ biryani_server_directory }}/server.rb {{ biryani_server_port }}
+WorkingDirectory={{ biryani_server_directory }}
+Restart=always
+Type=simple
+
+User=biryani
+Group=biryani
+
+[Install]
+WantedBy=multi-user.target

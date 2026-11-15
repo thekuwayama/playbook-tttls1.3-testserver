@@ -23,12 +23,12 @@ $ uv pip install -r requirements.txt
 ```bash
 $ docker image build --no-cache . -t playbook-tttls1.3-testserver/dev
 
-$ docker run --privileged -d -p 4433:443 --name dev playbook-tttls1.3-testserver/dev /sbin/init
+$ docker run --privileged -d -p 4433:443 -p 1443:1443 --name dev playbook-tttls1.3-testserver/dev /sbin/init
 
-$ uv run ansible-playbook -i playbook/dev playbook/private_certificate.yml playbook/https.yml
+$ uv run ansible-playbook -i playbook/dev playbook/private_certificate.yml playbook/https.yml playbook/biryani.yml
 ```
 
-Check [https://localhost:4433](https://localhost:4433)
+Check [https://localhost:4433](https://localhost:4433) and [https://localhost:1443](https://localhost:1443)
 
 ```bash
 $ docker ps -ql | xargs docker stop
@@ -48,7 +48,7 @@ $ echo "ubuntu ALL=(ALL) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/ubuntu
 ```
 
 ```bash
-$ uv run ansible-playbook --ask-vault-pass -i playbook/prod --user ubuntu playbook/certbot.yml playbook/https.yml playbook/sshd_config.yml playbook/paranoids.yml
+$ uv run ansible-playbook --ask-vault-pass -i playbook/prod --user ubuntu playbook/certbot.yml playbook/https.yml playbook/biryani.yml playbook/sshd_config.yml playbook/paranoids.yml
 ```
 
-Check [https://thekuwayama.net](https://thekuwayama.net)
+Check [https://thekuwayama.net](https://thekuwayama.net) and [https://thekuwayama.net:1443](https://thekuwayama.net:1443)

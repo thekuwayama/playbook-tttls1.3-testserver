@@ -1,0 +1,17 @@
+load_module /usr/lib/nginx/modules/ngx_stream_module.so;
+
+pid /run/biryani_https_nginx/nginx.pid;
+error_log stderr;
+
+events {}
+
+stream {
+  server {
+    listen {{ biryani_tls_port }} ssl;
+    ssl_certificate     /etc/letsencrypt/live/{{ domain }}/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/{{ domain }}/privkey.pem;
+    ssl_protocols       TLSv1.2 TLSv1.3;
+    ssl_alpn            h2;
+    proxy_pass          127.0.0.1:{{ biryani_server_port }};
+  }
+}

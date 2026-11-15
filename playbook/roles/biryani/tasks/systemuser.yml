@@ -1,0 +1,14 @@
+- name: Add system group
+  ansible.builtin.group:
+    name: biryani
+    gid: 11443
+    system: true
+
+- name: Add system user
+  ansible.builtin.user:
+    name: biryani
+    group: biryani
+    uid: 11443
+    system: true
+    shell: /sbin/nologin
+    create_home: false

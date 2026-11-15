@@ -1,0 +1,8 @@
+- name: Setup system user
+  ansible.builtin.import_tasks: systemuser.yml
+- name: Setup gems
+  ansible.builtin.import_tasks: gems.yml
+- name: Setup nginx
+  ansible.builtin.import_tasks: nginx.yml
+- name: Setup systemd
+  ansible.builtin.import_tasks: systemd.yml

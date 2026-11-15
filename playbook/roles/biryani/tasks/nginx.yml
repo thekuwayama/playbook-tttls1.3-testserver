@@ -1,0 +1,14 @@
+- name: Install "{{ packages }}"
+  ansible.builtin.apt:
+    name: "{{ packages }}"
+    update_cache: true
+  vars:
+    packages:
+      - nginx
+      - libnginx-mod-stream
+
+- name: Disable default nginx.service
+  ansible.builtin.systemd:
+    name: nginx.service
+    state: stopped
+    enabled: false
